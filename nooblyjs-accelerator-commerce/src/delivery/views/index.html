@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Management System - NooblyJS</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta name="description" content="Delivery Management System for comprehensive logistics and delivery operations">
+</head>
+<body>
+    <div class="main-container">
+        <!-- Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-truck"></i>
+                    <span>Delivery DMS</span>
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-section">
+                    <h3>Dashboard</h3>
+                    <a href="/applications/delivery" class="menu-item active">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Overview</span>
+                    </a>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Operations</h3>
+                    <a href="/applications/delivery/driver" class="menu-item">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Driver Interface</span>
+                    </a>
+                    <a href="/applications/delivery/tracking" class="menu-item">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <span>Order Tracking</span>
+                    </a>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Analytics</h3>
+                    <a href="/applications/delivery/analytics" class="menu-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports & Analytics</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <h1>Delivery Management System</h1>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <span id="system-status" class="badge badge-success">
+                            <i class="fas fa-circle"></i> System Online
+                        </span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Quick Navigation -->
+                <div class="stats-grid">
+                    <a href="/applications/delivery" class="stat-card" style="text-decoration: none; color: inherit;">
+                        <div class="stat-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Dashboard</h3>
+                            <p>Operations Overview</p>
+                        </div>
+                    </a>
+                    <a href="/applications/delivery/driver" class="stat-card" style="text-decoration: none; color: inherit;">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Driver</h3>
+                            <p>Driver Interface</p>
+                        </div>
+                    </a>
+                    <a href="/applications/delivery/tracking" class="stat-card" style="text-decoration: none; color: inherit;">
+                        <div class="stat-icon">
+                            <i class="fas fa-search-location"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Tracking</h3>
+                            <p>Order Tracking</p>
+                        </div>
+                    </a>
+                    <a href="/applications/delivery/analytics" class="stat-card" style="text-decoration: none; color: inherit;">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Analytics</h3>
+                            <p>Reports & Insights</p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Welcome Section -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Welcome to Delivery Management System</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Comprehensive delivery and logistics management platform designed for modern businesses.</p>
+
+                        <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                            <div>
+                                <h4><i class="fas fa-truck"></i> Real-time Tracking</h4>
+                                <p>Track all deliveries in real-time with GPS integration and automated updates.</p>
+                            </div>
+                            <div>
+                                <h4><i class="fas fa-users"></i> Driver Management</h4>
+                                <p>Comprehensive driver interface with route optimization and performance tracking.</p>
+                            </div>
+                            <div>
+                                <h4><i class="fas fa-chart-line"></i> Advanced Analytics</h4>
+                                <p>Detailed reports and analytics to optimize delivery operations and performance.</p>
+                            </div>
+                            <div>
+                                <h4><i class="fas fa-mobile-alt"></i> Customer Interface</h4>
+                                <p>User-friendly tracking interface for customers to monitor their orders.</p>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons" style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <a href="/applications/delivery" class="btn btn-primary">
+                                <i class="fas fa-play"></i> Get Started
+                            </a>
+                            <a href="/applications/delivery/analytics" class="btn btn-outline">
+                                <i class="fas fa-chart-bar"></i> View Analytics
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Initialize delivery app if the class is available
+        if (typeof DeliveryApp !== 'undefined') {
+            const deliveryApp = new DeliveryApp();
+        } else {
+            console.log('Delivery Management System - Navigation Interface Loaded');
+        }
+    </script>
+</body>
+</html>

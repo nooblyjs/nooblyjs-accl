@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracking - Delivery Management System</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1>Order Tracking</h1>
+            </div>
+            <div class="header-right">
+                <div class="header-actions">
+                    <a href="/applications/delivery" class="btn btn-outline">
+                        <i class="fas fa-home"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="page-content">
+            <!-- Search Section -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Track Your Order</h3>
+                </div>
+                <div class="card-content">
+                    <div class="form-grid">
+                        <div>
+                            <label for="order-number">Order Number</label>
+                            <input type="text" id="order-number" class="form-control" placeholder="Enter your order number (e.g., ORD-12345)">
+                        </div>
+                        <div>
+                            <label for="phone-number">Phone Number</label>
+                            <input type="tel" id="phone-number" class="form-control" placeholder="Enter your phone number">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="trackOrder()">
+                            <i class="fas fa-search"></i> Track Order
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracking Results -->
+            <div id="tracking-results" class="hidden">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Order Details</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="tracking-info">
+                            <div class="order-summary">
+                                <h4 id="order-id">Order #ORD-12345</h4>
+                                <p id="order-status" class="status-badge">In Transit</p>
+                                <p id="estimated-delivery">Estimated Delivery: Today, 3:00 PM - 5:00 PM</p>
+                            </div>
+
+                            <!-- Tracking Timeline -->
+                            <div class="tracking-timeline">
+                                <div class="timeline-item completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h5>Order Confirmed</h5>
+                                        <p>Your order has been received and confirmed</p>
+                                        <span class="timeline-time">Today, 10:30 AM</span>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-item completed">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h5>Order Prepared</h5>
+                                        <p>Your order has been prepared and packaged</p>
+                                        <span class="timeline-time">Today, 11:45 AM</span>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-item active">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h5>Out for Delivery</h5>
+                                        <p>Your order is on its way to you</p>
+                                        <span class="timeline-time">Today, 2:15 PM</span>
+                                    </div>
+                                </div>
+
+                                <div class="timeline-item pending">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-home"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h5>Delivered</h5>
+                                        <p>Order will be delivered to your address</p>
+                                        <span class="timeline-time">Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Driver Info -->
+                            <div class="driver-info">
+                                <h4>Delivery Driver</h4>
+                                <div class="driver-card">
+                                    <div class="driver-avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="driver-details">
+                                        <h5 id="driver-name">John Smith</h5>
+                                        <p id="driver-phone">+1 (555) 123-4567</p>
+                                        <p id="driver-vehicle">Toyota Camry - ABC123</p>
+                                    </div>
+                                    <div class="driver-actions">
+                                        <button class="btn btn-sm btn-outline" onclick="callDriver()">
+                                            <i class="fas fa-phone"></i> Call
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Delivery Address -->
+                            <div class="delivery-address">
+                                <h4>Delivery Address</h4>
+                                <div class="address-card">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <div>
+                                        <p id="delivery-address">123 Main Street, Apt 4B<br>New York, NY 10001</p>
+                                        <p id="delivery-instructions">Leave at front door</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Results -->
+            <div id="no-results" class="dashboard-card hidden">
+                <div class="card-content text-center">
+                    <i class="fas fa-search text-muted" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <h3>Order Not Found</h3>
+                    <p class="text-muted">Please check your order number and phone number and try again.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        function trackOrder() {
+            const orderNumber = document.getElementById('order-number').value.trim();
+            const phoneNumber = document.getElementById('phone-number').value.trim();
+
+            if (!orderNumber || !phoneNumber) {
+                alert('Please enter both order number and phone number');
+                return;
+            }
+
+            // Simulate tracking lookup
+            setTimeout(() => {
+                // Hide no results
+                document.getElementById('no-results').classList.add('hidden');
+
+                // Show tracking results (for demo purposes, always show results)
+                if (orderNumber.toLowerCase().includes('ord') || orderNumber.length > 3) {
+                    document.getElementById('tracking-results').classList.remove('hidden');
+                    updateTrackingInfo(orderNumber, phoneNumber);
+                } else {
+                    document.getElementById('tracking-results').classList.add('hidden');
+                    document.getElementById('no-results').classList.remove('hidden');
+                }
+            }, 1000);
+        }
+
+        function updateTrackingInfo(orderNumber, phoneNumber) {
+            // Update order details with provided information
+            document.getElementById('order-id').textContent = `Order #${orderNumber.toUpperCase()}`;
+
+            // Randomize some details for demo
+            const statuses = ['Order Confirmed', 'Preparing', 'Out for Delivery', 'Delivered'];
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+
+            const statusElement = document.getElementById('order-status');
+            statusElement.textContent = randomStatus;
+            statusElement.className = `badge badge-${randomStatus === 'Delivered' ? 'success' : 'info'}`;
+
+            // Update delivery time
+            const now = new Date();
+            const deliveryTime = new Date(now.getTime() + (Math.random() * 3 + 1) * 60 * 60 * 1000);
+            document.getElementById('estimated-delivery').textContent =
+                `Estimated Delivery: ${deliveryTime.toLocaleDateString()}, ${deliveryTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+        }
+
+        function callDriver() {
+            const driverPhone = document.getElementById('driver-phone').textContent;
+            alert(`Calling driver at ${driverPhone}`);
+        }
+
+        // Auto-refresh tracking info every 30 seconds
+        let trackingInterval;
+
+        function startAutoRefresh() {
+            if (trackingInterval) clearInterval(trackingInterval);
+
+            trackingInterval = setInterval(() => {
+                if (!document.getElementById('tracking-results').classList.contains('hidden')) {
+                    console.log('Refreshing tracking information...');
+                    // In a real app, this would fetch updated tracking data
+                }
+            }, 30000);
+        }
+
+        // Start auto-refresh when page loads
+        startAutoRefresh();
+    </script>
+</body>
+</html>

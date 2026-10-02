@@ -1,0 +1,48 @@
+/*
+ * Customer Accelerator: customer module UI, local rules only.
+ *
+ * Shared layout and components live in ../_cx/css/accelerator.css; the
+ * NooblyJS theme is ../_cx/css/styles.css (a verbatim copy of
+ * nooblyjs/styling/styles.css).
+ */
+
+/* timeline */
+.cx-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 20px;
+    border-left: 2px solid var(--divider);
+}
+
+.cx-timeline > li {
+    position: relative;
+    padding: 0 0 18px 12px;
+}
+
+.cx-timeline > li::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+    background-color: var(--neutral-dot);
+}
+
+.cx-timeline > li.cx-tl-note::before { background-color: var(--accent); }
+.cx-timeline > li.cx-tl-consent::before { background-color: var(--teal); }
+
+.cx-timeline-title {
+    font-weight: 600;
+}
+
+.cx-timeline-meta {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.cx-note-body {
+    white-space: pre-wrap;
+}

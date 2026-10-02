@@ -1,0 +1,51 @@
+{
+  "name": "nooblyjs-apps-commerce",
+  "version": "1.0.0",
+  "description": "This repository will hold the code for a micro-service that exposes ecommerce services including commerce, warehouse management, last mile delivery.",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev:web": "nodemon --watch src app.js",
+    "kill": "  kill -9 $(lsof -t -i:3003)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nooblyjs/nooblyjs-apps-commerce.git"
+  },
+  "keywords": [
+    "Nooblyjs",
+    "ecommerce",
+    "accelerator"
+  ],
+  "author": "Stephen Booysen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nooblyjs/nooblyjs-apps-commerce/issues"
+  },
+  "homepage": "https://github.com/nooblyjs/nooblyjs-apps-commerce#readme",
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.81",
+    "@google/gemini-cli": "^0.2.1",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^9.0.2",
+    "mime-types": "^3.0.1",
+    "multer": "^2.0.0-rc.4",
+    "nooblyjs-core": "1.0.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "stripe": "^18.5.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "jest": "^30.1.3",
+    "supertest": "^7.1.4"
+  }
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Management System - Admin Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Delivery Management System</h1>
+            <p>Admin Dashboard - Real-time Operations Overview</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-orders">-</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="active-orders">-</div>
+                    <div class="stat-label">Active Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completed-orders">-</div>
+                    <div class="stat-label">Completed Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="active-drivers">-</div>
+                    <div class="stat-label">Active Drivers</div>
+                </div>
+            </div>
+
+            <div class="actions-section">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="actions-grid">
+                    <a href="#" class="action-btn" onclick="createOrder()">Create New Order</a>
+                    <a href="#" class="action-btn" onclick="manageDrivers()">Manage Drivers</a>
+                    <a href="/applications/delivery/analytics" class="action-btn">View Analytics</a>
+                    <a href="#" class="action-btn" onclick="viewReports()">Generate Reports</a>
+                </div>
+            </div>
+
+            <div class="recent-activity">
+                <h2 class="section-title">Recent Activity</h2>
+                <div id="activity-list">
+                    <div class="activity-item">
+                        <span>System starting up...</span>
+                        <span class="activity-time">Just now</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/applications/delivery/js/app.js"></script>
+    <script>
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/applications/delivery/api/analytics/overview');
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('total-orders').textContent = data.analytics.totalOrders;
+                    document.getElementById('active-orders').textContent = data.analytics.activeOrders;
+                    document.getElementById('completed-orders').textContent = data.analytics.completedOrders;
+                    document.getElementById('active-drivers').textContent = data.analytics.activeDrivers;
+                }
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+
+        function createOrder() {
+            // Mock order creation
+            const orderData = {
+                customerId: 'customer-' + Date.now(),
+                items: [{ name: 'Sample Item', quantity: 1 }],
+                deliveryAddress: '123 Sample Street',
+                contactPhone: '+1234567890'
+            };
+
+            fetch('/applications/delivery/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Order created successfully! Order ID: ' + data.orderId);
+                    loadDashboardData();
+                } else {
+                    alert('Failed to create order');
+                }
+            });
+        }
+
+        function manageDrivers() {
+            window.location.href = '/applications/delivery/driver';
+        }
+
+        function viewReports() {
+            alert('Reports feature coming soon!');
+        }
+
+        // Auto-refresh dashboard data every 30 seconds
+        setInterval(loadDashboardData, 30000);
+
+        // Load initial data
+        loadDashboardData();
+    </script>
+</body>
+</html>

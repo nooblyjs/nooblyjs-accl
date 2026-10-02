@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Interface - Delivery Management System</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1>Driver Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="header-actions">
+                    <span id="driver-status" class="badge badge-success">
+                        <i class="fas fa-circle"></i> Online
+                    </span>
+                    <a href="/applications/delivery" class="btn btn-outline">
+                        <i class="fas fa-home"></i> Main Dashboard
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="page-content">
+            <!-- Driver Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="pending-deliveries">0</h3>
+                        <p>Pending Deliveries</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="completed-today">0</h3>
+                        <p>Completed Today</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="total-distance">0 km</h3>
+                        <p>Distance Traveled</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="earnings-today">$0.00</h3>
+                        <p>Earnings Today</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="actions-grid">
+                            <button class="btn btn-primary" onclick="toggleAvailability()">
+                                <i class="fas fa-power-off"></i>
+                                Toggle Availability
+                            </button>
+                            <button class="btn btn-secondary" onclick="viewRoute()">
+                                <i class="fas fa-map"></i>
+                                View Route
+                            </button>
+                            <button class="btn btn-info" onclick="reportIssue()">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Report Issue
+                            </button>
+                            <button class="btn btn-success" onclick="viewEarnings()">
+                                <i class="fas fa-chart-line"></i>
+                                View Earnings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Deliveries -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Current Deliveries</h3>
+                    </div>
+                    <div class="card-content">
+                        <div id="current-deliveries">
+                            <p class="text-muted">No active deliveries</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery History -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Recent Deliveries</h3>
+                </div>
+                <div class="card-content">
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
+                                    <th>Completed</th>
+                                    <th>Earnings</th>
+                                </tr>
+                            </thead>
+                            <tbody id="delivery-history">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">Loading delivery history...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Driver-specific functionality
+        function toggleAvailability() {
+            const statusBadge = document.getElementById('driver-status');
+            const isOnline = statusBadge.classList.contains('badge-success');
+
+            if (isOnline) {
+                statusBadge.className = 'badge badge-warning';
+                statusBadge.innerHTML = '<i class="fas fa-circle"></i> Offline';
+            } else {
+                statusBadge.className = 'badge badge-success';
+                statusBadge.innerHTML = '<i class="fas fa-circle"></i> Online';
+            }
+        }
+
+        function viewRoute() {
+            alert('Route planning feature coming soon!');
+        }
+
+        function reportIssue() {
+            alert('Issue reporting feature coming soon!');
+        }
+
+        function viewEarnings() {
+            alert('Earnings details feature coming soon!');
+        }
+
+        // Load driver data
+        async function loadDriverData() {
+            try {
+                // Simulate driver stats
+                document.getElementById('pending-deliveries').textContent = Math.floor(Math.random() * 5) + 1;
+                document.getElementById('completed-today').textContent = Math.floor(Math.random() * 20) + 5;
+                document.getElementById('total-distance').textContent = (Math.random() * 100 + 20).toFixed(1) + ' km';
+                document.getElementById('earnings-today').textContent = '$' + (Math.random() * 200 + 50).toFixed(2);
+
+                // Load delivery history
+                loadDeliveryHistory();
+            } catch (error) {
+                console.error('Failed to load driver data:', error);
+            }
+        }
+
+        function loadDeliveryHistory() {
+            const tbody = document.getElementById('delivery-history');
+            const sampleDeliveries = [
+                { id: 'ORD-001', customer: 'John Doe', address: '123 Main St', status: 'Delivered', time: '2 hours ago', earnings: '$12.50' },
+                { id: 'ORD-002', customer: 'Jane Smith', address: '456 Oak Ave', status: 'Delivered', time: '3 hours ago', earnings: '$15.75' },
+                { id: 'ORD-003', customer: 'Bob Johnson', address: '789 Pine Rd', status: 'Delivered', time: '4 hours ago', earnings: '$9.25' }
+            ];
+
+            tbody.innerHTML = sampleDeliveries.map(delivery => `
+                <tr>
+                    <td>${delivery.id}</td>
+                    <td>${delivery.customer}</td>
+                    <td>${delivery.address}</td>
+                    <td><span class="badge badge-success">${delivery.status}</span></td>
+                    <td>${delivery.time}</td>
+                    <td>${delivery.earnings}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadDriverData, 30000);
+
+        // Load initial data
+        loadDriverData();
+    </script>
+</body>
+</html>

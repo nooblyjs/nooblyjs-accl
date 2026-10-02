@@ -1,0 +1,71 @@
+/*
+ * Customer Accelerator: marketing module UI, local rules only.
+ *
+ * Shared layout and components live in ../_cx/css/accelerator.css; the
+ * NooblyJS theme is ../_cx/css/styles.css (a verbatim copy of
+ * nooblyjs/styling/styles.css).
+ */
+
+/* template editor */
+.cx-code {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.5;
+    tab-size: 2;
+}
+
+.cx-preview-frame {
+    width: 100%;
+    min-height: 420px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: #fff;
+}
+
+.cx-preview-subject {
+    font-weight: 600;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-sunken);
+    margin-bottom: 8px;
+    overflow-wrap: anywhere;
+}
+
+.cx-sms-bubble {
+    max-width: 320px;
+    padding: 12px 14px;
+    border-radius: 18px 18px 18px 4px;
+    background: var(--neutral-soft);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* audience rule builder */
+.cx-rule-row {
+    display: grid;
+    grid-template-columns: minmax(120px, 1.2fr) minmax(90px, 0.8fr) minmax(120px, 1.4fr) auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+@media (max-width: 576px) {
+    .cx-rule-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* message stats funnel */
+.cx-funnel .cx-stat-value small {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-left: 6px;
+}
+
+.cx-skip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}

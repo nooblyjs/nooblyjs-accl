@@ -1,0 +1,564 @@
+/*
+ * Customer Accelerator: shared admin UI styles (all modules).
+ *
+ * Load order: Bootstrap 5.3 → Bootstrap Icons → styles.css (verbatim copy of
+ * nooblyjs/styling/styles.css: the theme, never edit it here) → this file →
+ * the module's own stylesheet (customer.css, marketing.css, …).
+ * Colours come from the theme tokens (var(--accent), …). Classes are
+ * prefixed `cx-` so they never collide with Bootstrap.
+ */
+
+/* ---- Bootstrap ↔ theme mapping ------------------------------------------ */
+:root {
+    --bs-body-font-family: var(--font-body);
+    --bs-body-bg: var(--bg);
+    --bs-body-color: var(--ink);
+    --bs-border-color: var(--border);
+    --bs-primary: var(--accent);
+    --bs-link-color: var(--accent-link);
+    --bs-link-hover-color: var(--accent);
+    --bs-secondary-color: var(--muted);
+    --bs-tertiary-bg: var(--surface-sunken);
+    --cx-sidebar-width: 200px;
+}
+
+.nav-tabs {
+    border-bottom-color: var(--border);
+}
+
+.nav-tabs .nav-link {
+    color: var(--ink-2);
+    font-weight: 500;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 10px 4px;
+    margin-right: 24px;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-link:hover {
+    color: var(--ink);
+    background: transparent;
+    border-bottom-color: var(--accent);
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--danger);
+}
+
+.invalid-feedback {
+    color: var(--danger-ink);
+}
+
+.table > :not(caption) > * > * {
+    background-color: transparent;
+}
+
+/* ---- Layout -------------------------------------------------------------- */
+.cx-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--cx-sidebar-width);
+    padding: 20px 16px;
+    background-color: var(--surface-sunken);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 1020;
+}
+
+.cx-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--ink);
+}
+
+.cx-logo-circles {
+    display: flex;
+}
+
+.cx-logo-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--accent);
+}
+
+.cx-logo-circle + .cx-logo-circle {
+    background-color: var(--teal);
+    margin-left: -6px;
+}
+
+.cx-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cx-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.cx-nav-link:hover {
+    color: var(--ink);
+    background-color: var(--neutral-soft);
+}
+
+.cx-nav-link.active {
+    background-color: var(--ink);
+    color: var(--on-ink);
+    font-weight: 600;
+}
+
+.cx-sidebar-footer {
+    margin-top: 32px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.cx-main {
+    margin-left: var(--cx-sidebar-width);
+    padding: var(--spacing-3xl);
+    min-height: 100vh;
+}
+
+.cx-page-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: var(--spacing-xl);
+}
+
+.cx-page-title {
+    margin: 0 0 4px;
+    font-size: 28px;
+}
+
+.cx-page-subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .cx-sidebar {
+        position: static;
+        width: auto;
+        min-height: 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        padding: 12px 16px;
+    }
+
+    .cx-logo {
+        margin-bottom: 12px;
+    }
+
+    .cx-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .cx-sidebar-footer {
+        display: none;
+    }
+
+    .cx-main {
+        margin-left: 0;
+        padding: 20px 16px;
+    }
+}
+
+/* ---- Toolbar and tables -------------------------------------------------- */
+.cx-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.cx-toolbar .cx-search {
+    flex: 1 1 260px;
+    max-width: 420px;
+}
+
+.cx-toolbar .form-select {
+    width: auto;
+}
+
+.cx-table-card {
+    padding: 0;
+}
+
+.cx-table-card .table {
+    margin-bottom: 0;
+}
+
+.cx-row-link {
+    cursor: pointer;
+}
+
+.cx-row-link:hover td {
+    background-color: var(--accent-tint);
+}
+
+.cx-pager {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-top: 1px solid var(--divider);
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.cx-empty {
+    padding: 40px 16px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.cx-empty .bi {
+    display: block;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.cx-mono {
+    font-family: var(--mono);
+    font-size: 13px;
+}
+
+/* ---- Badges, pills and avatars ------------------------------------------- */
+.cx-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.cx-status::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.cx-status-active,
+.cx-status-opt_in,
+.cx-status-allowed,
+.cx-status-approved,
+.cx-status-running,
+.cx-status-sent,
+.cx-status-delivered,
+.cx-status-completed {
+    background-color: var(--teal-soft);
+    color: var(--teal-text);
+}
+
+.cx-status-inactive,
+.cx-status-pending,
+.cx-status-merged,
+.cx-status-draft,
+.cx-status-paused,
+.cx-status-archived,
+.cx-status-retired,
+.cx-status-skipped,
+.cx-status-cancelled {
+    background-color: var(--neutral-soft);
+    color: var(--neutral-text);
+}
+
+.cx-status-blocked,
+.cx-status-opt_out,
+.cx-status-denied,
+.cx-status-erased,
+.cx-status-failed,
+.cx-status-bounced,
+.cx-status-suppressed {
+    background-color: var(--danger-soft);
+    color: var(--danger-ink);
+}
+
+.cx-stage {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    background-color: var(--chip);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.cx-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background-color: var(--accent-soft);
+    color: var(--accent-link);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.cx-primary {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.cx-avatar {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 20px;
+    background-color: var(--avatar-peach-bg);
+    color: var(--avatar-peach-deep);
+}
+
+.cx-avatar-sm {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+    font-size: 13px;
+}
+
+.cx-avatar-1 { background-color: var(--avatar-mint-bg); color: var(--avatar-mint-deep); }
+.cx-avatar-2 { background-color: var(--avatar-lilac-bg); color: var(--avatar-lilac-deep); }
+.cx-avatar-3 { background-color: var(--avatar-butter-bg); color: var(--avatar-butter-deep); }
+.cx-avatar-4 { background-color: var(--avatar-rose-bg); color: var(--avatar-rose-deep); }
+.cx-avatar-5 { background-color: var(--avatar-sky-bg); color: var(--avatar-sky-deep); }
+.cx-avatar-6 { background-color: var(--avatar-sage-bg); color: var(--avatar-sage-deep); }
+.cx-avatar-7 { background-color: var(--avatar-sand-bg); color: var(--avatar-sand-deep); }
+
+/* ---- Customer 360 -------------------------------------------------------- */
+.cx-hero {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cx-hero-identity {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    min-width: 0;
+}
+
+.cx-hero-name {
+    margin: 0;
+    font-size: 26px;
+    overflow-wrap: anywhere;
+}
+
+.cx-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.cx-kv {
+    display: grid;
+    grid-template-columns: minmax(110px, 40%) 1fr;
+    gap: 8px 12px;
+    margin: 0;
+    font-size: 14px;
+}
+
+.cx-kv dt {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.cx-kv dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.cx-section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 12px;
+    font-size: 16px;
+}
+
+.cx-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cx-list > li {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--divider);
+}
+
+.cx-list > li:last-child {
+    border-bottom: 0;
+}
+
+.cx-list-main {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.cx-list-sub {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.cx-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.cx-icon-btn {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    padding: 4px 6px;
+    border-radius: var(--radius-sm);
+    line-height: 1;
+}
+
+.cx-icon-btn:hover {
+    color: var(--ink);
+    background-color: var(--neutral-soft);
+}
+
+.cx-icon-btn.cx-danger:hover {
+    color: var(--danger);
+    background-color: var(--danger-soft);
+}
+
+/* summary tiles */
+.cx-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    height: 100%;
+}
+
+.cx-stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.cx-stat-value {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+}
+
+/* ---- Feedback ------------------------------------------------------------ */
+.cx-toasts {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1090;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: min(380px, calc(100vw - 32px));
+}
+
+.cx-toast {
+    background: var(--ink);
+    color: var(--on-ink);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    box-shadow: var(--shadow-lg);
+    font-size: 14px;
+}
+
+.cx-toast.cx-toast-error {
+    background: var(--danger);
+}
+
+.cx-loading {
+    padding: 40px;
+    text-align: center;
+    color: var(--muted);
+}
+
+/* ---- Bootstrap fixes on top of the theme --------------------------------- */
+/* The theme sets select padding, which hides Bootstrap's chevron space. */
+.form-select {
+    padding-right: 2.25rem;
+}
+
+/* Form modals wrap header/body/footer in a <form>; keep the scrollable layout. */
+.modal-content > form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: 100%;
+}
+
+.modal-dialog-scrollable .modal-content > form {
+    overflow: hidden;
+}
+
+.modal-dialog-scrollable .modal-content > form > .modal-body {
+    overflow-y: auto;
+}
+
+/* in-flight states */
+.cx-status-scheduled,
+.cx-status-queued,
+.cx-status-sending,
+.cx-status-deferred,
+.cx-status-pending_approval {
+    background-color: var(--warn-soft);
+    color: var(--warn-ink);
+}
+
+/* public pages (unsubscribe, link errors) */
+.cx-narrow {
+    max-width: 560px;
+}

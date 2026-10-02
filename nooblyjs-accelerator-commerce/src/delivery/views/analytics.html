@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Delivery Management System</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1>Analytics Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="header-actions">
+                    <select class="filter-select" id="time-period" onchange="updateAnalytics()">
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month" selected>This Month</option>
+                        <option value="quarter">This Quarter</option>
+                    </select>
+                    <button class="header-btn" onclick="exportReport()">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <a href="/applications/delivery" class="btn btn-outline">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="page-content">
+            <!-- Key Metrics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="total-orders">1,247</h3>
+                        <p>Total Orders</p>
+                        <span class="stat-change positive">+12% from last month</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="successful-deliveries">1,198</h3>
+                        <p>Successful Deliveries</p>
+                        <span class="stat-change positive">96.1% success rate</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="avg-delivery-time">42 min</h3>
+                        <p>Avg Delivery Time</p>
+                        <span class="stat-change positive">-5% faster</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="total-revenue">$24,890</h3>
+                        <p>Total Revenue</p>
+                        <span class="stat-change positive">+18% growth</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="analytics-grid">
+                <!-- Orders Chart -->
+                <div class="analytics-card">
+                    <h3>Orders Over Time</h3>
+                    <div class="chart-container">
+                        <canvas id="ordersChart">
+                            <!-- Placeholder for chart -->
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-line"></i>
+                                <p>Orders trend visualization would appear here</p>
+                            </div>
+                        </canvas>
+                    </div>
+                </div>
+
+                <!-- Delivery Performance -->
+                <div class="analytics-card">
+                    <h3>Delivery Performance</h3>
+                    <div class="chart-container">
+                        <canvas id="performanceChart">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-bar"></i>
+                                <p>Performance metrics visualization would appear here</p>
+                            </div>
+                        </canvas>
+                    </div>
+                </div>
+
+                <!-- Driver Statistics -->
+                <div class="analytics-card">
+                    <h3>Top Performing Drivers</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Driver</th>
+                                    <th>Deliveries</th>
+                                    <th>Success Rate</th>
+                                    <th>Avg Time</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody id="driver-stats">
+                                <tr>
+                                    <td>John Smith</td>
+                                    <td>156</td>
+                                    <td>98.7%</td>
+                                    <td>38 min</td>
+                                    <td>4.9 ⭐</td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Garcia</td>
+                                    <td>142</td>
+                                    <td>97.2%</td>
+                                    <td>41 min</td>
+                                    <td>4.8 ⭐</td>
+                                </tr>
+                                <tr>
+                                    <td>David Wilson</td>
+                                    <td>134</td>
+                                    <td>95.5%</td>
+                                    <td>44 min</td>
+                                    <td>4.7 ⭐</td>
+                                </tr>
+                                <tr>
+                                    <td>Sarah Johnson</td>
+                                    <td>128</td>
+                                    <td>96.9%</td>
+                                    <td>39 min</td>
+                                    <td>4.8 ⭐</td>
+                                </tr>
+                                <tr>
+                                    <td>Mike Chen</td>
+                                    <td>119</td>
+                                    <td>94.1%</td>
+                                    <td>46 min</td>
+                                    <td>4.6 ⭐</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Geographic Distribution -->
+                <div class="analytics-card">
+                    <h3>Delivery Zones</h3>
+                    <div class="zone-stats">
+                        <div class="zone-item">
+                            <div class="zone-info">
+                                <h4>Downtown</h4>
+                                <p>342 deliveries</p>
+                            </div>
+                            <div class="zone-bar">
+                                <div class="zone-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="zone-item">
+                            <div class="zone-info">
+                                <h4>Suburbs North</h4>
+                                <p>278 deliveries</p>
+                            </div>
+                            <div class="zone-bar">
+                                <div class="zone-fill" style="width: 69%"></div>
+                            </div>
+                        </div>
+                        <div class="zone-item">
+                            <div class="zone-info">
+                                <h4>Suburbs South</h4>
+                                <p>234 deliveries</p>
+                            </div>
+                            <div class="zone-bar">
+                                <div class="zone-fill" style="width: 58%"></div>
+                            </div>
+                        </div>
+                        <div class="zone-item">
+                            <div class="zone-info">
+                                <h4>Industrial Area</h4>
+                                <p>198 deliveries</p>
+                            </div>
+                            <div class="zone-bar">
+                                <div class="zone-fill" style="width: 49%"></div>
+                            </div>
+                        </div>
+                        <div class="zone-item">
+                            <div class="zone-info">
+                                <h4>Waterfront</h4>
+                                <p>165 deliveries</p>
+                            </div>
+                            <div class="zone-bar">
+                                <div class="zone-fill" style="width: 41%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Satisfaction -->
+                <div class="analytics-card">
+                    <h3>Customer Satisfaction</h3>
+                    <div class="satisfaction-metrics">
+                        <div class="satisfaction-item">
+                            <div class="satisfaction-score">4.6</div>
+                            <div class="satisfaction-label">Average Rating</div>
+                        </div>
+                        <div class="satisfaction-breakdown">
+                            <div class="rating-bar">
+                                <span>5 stars</span>
+                                <div class="bar"><div class="fill" style="width: 68%"></div></div>
+                                <span>68%</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span>4 stars</span>
+                                <div class="bar"><div class="fill" style="width: 22%"></div></div>
+                                <span>22%</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span>3 stars</span>
+                                <div class="bar"><div class="fill" style="width: 7%"></div></div>
+                                <span>7%</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span>2 stars</span>
+                                <div class="bar"><div class="fill" style="width: 2%"></div></div>
+                                <span>2%</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span>1 star</span>
+                                <div class="bar"><div class="fill" style="width: 1%"></div></div>
+                                <span>1%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        function updateAnalytics() {
+            const period = document.getElementById('time-period').value;
+            console.log(`Updating analytics for period: ${period}`);
+
+            // Simulate data update based on selected period
+            setTimeout(() => {
+                // Update metrics based on selected period
+                updateMetricsForPeriod(period);
+            }, 500);
+        }
+
+        function updateMetricsForPeriod(period) {
+            const metrics = {
+                today: {
+                    orders: 47,
+                    deliveries: 44,
+                    avgTime: '45 min',
+                    revenue: '$890'
+                },
+                week: {
+                    orders: 324,
+                    deliveries: 312,
+                    avgTime: '43 min',
+                    revenue: '$6,240'
+                },
+                month: {
+                    orders: 1247,
+                    deliveries: 1198,
+                    avgTime: '42 min',
+                    revenue: '$24,890'
+                },
+                quarter: {
+                    orders: 3891,
+                    deliveries: 3742,
+                    avgTime: '44 min',
+                    revenue: '$78,456'
+                }
+            };
+
+            const data = metrics[period];
+            if (data) {
+                document.getElementById('total-orders').textContent = data.orders;
+                document.getElementById('successful-deliveries').textContent = data.deliveries;
+                document.getElementById('avg-delivery-time').textContent = data.avgTime;
+                document.getElementById('total-revenue').textContent = data.revenue;
+            }
+        }
+
+        function exportReport() {
+            const period = document.getElementById('time-period').value;
+            alert(`Exporting analytics report for ${period}. This feature will download a PDF report.`);
+        }
+
+        // Auto-refresh analytics every 5 minutes
+        setInterval(() => {
+            console.log('Auto-refreshing analytics data...');
+            updateAnalytics();
+        }, 300000);
+
+        // Load initial analytics
+        updateAnalytics();
+    </script>
+
+    <style>
+        .zone-stats {
+            padding: 1rem 0;
+        }
+
+        .zone-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .zone-info {
+            min-width: 120px;
+        }
+
+        .zone-info h4 {
+            margin: 0 0 0.25rem 0;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .zone-info p {
+            margin: 0;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .zone-bar {
+            flex: 1;
+            height: 8px;
+            background-color: var(--muted);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .zone-fill {
+            height: 100%;
+            background-color: var(--bs-primary);
+            transition: width 0.3s ease;
+        }
+
+        .satisfaction-metrics {
+            padding: 1rem 0;
+        }
+
+        .satisfaction-item {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .satisfaction-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--bs-primary);
+        }
+
+        .satisfaction-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .rating-bar span:first-child {
+            min-width: 50px;
+        }
+
+        .rating-bar span:last-child {
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .bar {
+            flex: 1;
+            height: 6px;
+            background-color: var(--muted);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            background-color: var(--bs-success);
+            transition: width 0.3s ease;
+        }
+
+        .chart-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .chart-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</body>
+</html>

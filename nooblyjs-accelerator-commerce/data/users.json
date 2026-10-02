@@ -1,0 +1,10 @@
+[
+  {
+    "id": "1756402160319",
+    "email": "newuser@example.com",
+    "password": "$2b$10$MRb.MrEf6Nv1FfAaV/vQwe3qmz.JDoU5XwEWeDYBm2JnMB9PlcFL6",
+    "name": "New User",
+    "provider": "local",
+    "createdAt": "2025-08-28T17:29:20.319Z"
+  }
+]

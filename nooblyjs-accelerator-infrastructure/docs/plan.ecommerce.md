@@ -1,0 +1,1 @@
+Ok, its time to think really hard about this development. I would like you to build the eCommerce application based on the PRD @"docs/eCommerce Requirements Document.md". Please us the @docs/nooblyjs-core-usage-guide to leverage the noobly-services. Please based the application on a shopify theme.
