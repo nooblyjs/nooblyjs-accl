@@ -1,0 +1,28 @@
+{
+  "name": "nooblyjs-accelerators",
+  "version": "1.0.0",
+  "description": "This is the container for a bunch of solutions. This job will assist in building and cleaning up everything",
+  "homepage": "https://github.com/nooblyjs/nooblyjs-accelerators#readme",
+  "bugs": {
+    "url": "https://github.com/nooblyjs/nooblyjs-accelerators/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nooblyjs/nooblyjs-accelerators.git"
+  },
+  "type": "commonjs",
+  "main": "scripts/run-all.js",
+  "scripts": {
+    "start": "node scripts/run-all.js start --parallel",
+    "dev": "node scripts/run-all.js dev --parallel",
+    "install:all": "node scripts/run-all.js install",
+    "postinstall": "npm run install:all",
+    "build": "node scripts/run-all.js build",
+    "clean": "node scripts/run-all.js clean && rimraf node_modules",
+    "test": "node scripts/run-all.js test",
+    "coverage": "node scripts/run-all.js coverage"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1"
+  }
+}

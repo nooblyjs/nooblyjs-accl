@@ -1,0 +1,23 @@
+{
+  "name": "nooblyjs-accelerator-analytics",
+  "version": "1.0.0",
+  "description": "This repository allows for tooling relating to analytics that can be used in applications",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon --watch src app.js",
+    "build": "npm install",
+    "clean": "rimraf coverage node_modules",
+    "test": "jest --passWithNoTests",
+    "coverage": "jest --passWithNoTests --coverage"
+  },
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

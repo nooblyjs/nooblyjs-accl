@@ -1,0 +1,23 @@
+{
+  "name": "nooblyjs-accelerator-studio",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon --watch src app.js",
+    "build": "npm install",
+    "clean": "rimraf coverage node_modules",
+    "test": "jest --passWithNoTests",
+    "coverage": "jest --passWithNoTests --coverage"
+  },
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

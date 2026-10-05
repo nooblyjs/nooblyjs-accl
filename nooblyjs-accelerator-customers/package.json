@@ -14,7 +14,9 @@
   },
   "scripts": {
     "start": "node test/app/index.js",
-    "dev": "node --watch-path=src --watch-path=index.js test/app/index.js",
+    "dev": "nodemon --watch src --watch index.js test/app/index.js",
+    "build": "npm install",
+    "clean": "rimraf coverage .temp/coverage node_modules",
     "test": "jest",
     "coverage": "jest --coverage",
     "kill": "kill -9 $(lsof -t -i:3003)"
@@ -27,8 +29,10 @@
   },
   "devDependencies": {
     "jest": "^30.5.2",
-    "nooblyjs-core": "../nooblyjs-core/",
-    "supertest": "^7.3.0"
+    "nooblyjs-core": "file:../../nooblyjs-core",
+    "supertest": "^7.3.0",
+    "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1"
   },
   "jest": {
     "testEnvironment": "node",

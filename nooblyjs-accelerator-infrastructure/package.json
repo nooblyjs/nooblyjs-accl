@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "This repository holds the code for a micro-service that exposes multi cloud services which includes servers, database functionality etc",
   "main": "index.js",
-   "scripts": {
+  "scripts": {
     "start": "node app.js",
-    "dev:web": "nodemon --watch src app.js",
+    "dev": "nodemon --watch src app.js",
+    "build": "npm install",
+    "clean": "rimraf coverage node_modules",
+    "test": "jest --passWithNoTests",
+    "coverage": "jest --passWithNoTests --coverage",
     "kill": "  kill -9 $(lsof -t -i:3003)"
   },
   "dependencies": {
@@ -25,5 +29,13 @@
     "uuid": "^11.1.0"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
 }
