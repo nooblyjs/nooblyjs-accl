@@ -39,7 +39,7 @@ Goal: the seeded contract, with this product's name, nav and empty pages, loaded
 - [x] 0.5 Express 4/5 compatibility: replace `'/{*rest}'` with the fallback middleware (§3.4); run the suite under both majors.
 - [x] 0.6 Load the accelerator from the launcher `../app.js` via `register()` (using `createDevLauncher()` until the launcher builds its own host). Proven by `test/launcher.test.js` (CommonJS, Express 4, real nooblyjs-core).
 - [ ] 0.6a Agree one entry-point convention for all accelerators with the launcher's owner (architecture O8): `nooblyjs-accelerator-customers` uses `mount()`.
-- [ ] 0.6b Make `../app.js` runnable: it calls `serviceRegistry.dataServe()` (nooblyjs-core's is `dataService()`), and the monorepo root has no `node_modules` and doesn't list `passport`, which it requires.
+- [ ] 0.6b Make `../app.js` runnable: ~~it calls `serviceRegistry.dataServe()`~~ (fixed: `dataService()`); the monorepo root has no `node_modules` and doesn't list `passport`, which it requires.
 - [x] 0.7 `infrastructure.css` skeleton: scoped, app tokens for cloud and engine badges (§11.4).
 
 **Exit check:** `npm test` green on Express 4 and 5; both `npm start` and the launcher (`../app.js`) show the five nav

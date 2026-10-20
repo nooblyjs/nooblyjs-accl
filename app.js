@@ -39,7 +39,7 @@ serviceRegistry.initialize(app,eventEmitter);
 
 const log = serviceRegistry.logger('console');
 const cache = serviceRegistry.cache('memory');
-const dataserve = serviceRegistry.dataServe('memory');
+const dataserve = serviceRegistry.dataService('memory');
 const filing = serviceRegistry.filing('local');
 const queue = serviceRegistry.queue('memory');
 const scheduling = serviceRegistry.scheduling('memory');
