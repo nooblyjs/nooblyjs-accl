@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>web-01 · Noobly Cloud</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&amp;family=Figtree:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F5F1EE;color:#241C1A;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#A63F1C}a:hover{color:#7E2E12}
+.disp{font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13.5px}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.nav a{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:12px;color:#4A3F3A;text-decoration:none;font-weight:600;font-size:14.5px}
+.nav a:hover{background:#F0E9E4;color:#241C1A}
+.nav a.on{background:#241C1A;color:#FFF8F2}
+.main{flex:999 1 560px;min-width:0;padding:40px 48px 64px;box-sizing:border-box}
+.h1{font-family:"Bricolage Grotesque",sans-serif;font-size:44px;line-height:1.05;font-weight:800;letter-spacing:-0.03em;margin:0}
+.h2{font-family:"Bricolage Grotesque",sans-serif;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:12px;font:600 14.5px Figtree,sans-serif;text-decoration:none;border:1px solid #DCD2CB;background:#FFFFFF;color:#241C1A;cursor:pointer;box-sizing:border-box;white-space:nowrap}
+.btn:hover{background:#F0E9E4;color:#241C1A}
+.btn-p{background:#C2471F;border-color:#C2471F;color:#FFFFFF}
+.btn-p:hover{background:#A63F1C;border-color:#A63F1C;color:#FFFFFF}
+.btn-sm{min-height:36px;padding:0 12px;font-size:13.5px}
+.btn-icon{width:36px;min-height:36px;padding:0}
+.card{background:#FFFFFF;border:1px solid #E6DED8;border-radius:20px;padding:24px;box-sizing:border-box;min-width:0}
+.tile{background:#FFFFFF;border:1px solid #E6DED8;border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.tv{font-family:"Bricolage Grotesque",sans-serif;font-size:26px;line-height:1.05;font-weight:800;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+.cap{font-size:12.5px;font-weight:600;color:#6B605A}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.dot{width:7px;height:7px;border-radius:999px;background:currentColor}
+.p-ok{background:#DDEFEC;color:#1C5A5F}.p-warn{background:#FBEFD2;color:#6E4A0E}.p-off{background:#ECE6E1;color:#5E534D}.p-err{background:#F8DADD;color:#7D1A26}.p-acc{background:#FCE3D6;color:#8A3415}
+.prov{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:24px;padding:0 6px;box-sizing:border-box;border-radius:8px;font:500 11px "JetBrains Mono",monospace;flex:none}
+.prov-g{background:#D6E4FA;color:#1F4A8A}.prov-a{background:#FBE6A6;color:#6B4E00}
+.crumb{font-size:14.5px;font-weight:600;color:#6B605A;display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.tbl{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
+.tbl th{text-align:left;font-size:12.5px;font-weight:600;color:#6B605A;padding:10px 12px;border-bottom:1px solid #E6DED8;white-space:nowrap}
+.tbl td{padding:14px 12px;border-bottom:1px solid #F0E9E4;vertical-align:middle;white-space:nowrap}
+.tbl tbody tr:last-child td{border-bottom:0}
+.sub{display:block;font-size:13.5px;color:#6B605A;margin-top:2px}
+.meter{height:8px;border-radius:999px;background:#F0E9E4;overflow:hidden}
+.meter span{display:block;height:100%;border-radius:999px;background:#C2471F}
+.kv{display:grid;grid-template-columns:minmax(110px,150px) minmax(0,1fr);gap:14px 16px;font-size:15px;margin:0}
+.kv dt{color:#6B605A;font-weight:600;font-size:14px}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.code{background:#241C1A;color:#F5EDE8;border-radius:18px;padding:20px 22px;font:400 13px/1.75 "JetBrains Mono",monospace;overflow-x:auto;margin:0;white-space:pre}
+.code .t{color:#CDBFB7}.code .ok{color:#9ED9D3}
+@media (max-width:860px){.main{padding:24px 16px 48px}.h1{font-size:34px}.side-foot{display:none !important}}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F1EE">
+<aside aria-label="Sidebar" style="flex: 1 1 248px; box-sizing: border-box; background: #FBF8F6; border-right: 1px solid #E6DED8; padding: 24px 16px; display: flex; flex-direction: column; gap: 24px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 0 8px; min-height: 44px; text-decoration: none; color: #241C1A">
+<span aria-hidden="true" style="position: relative; width: 32px; height: 22px; flex: none"><span style="position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 999px; background: #C2471F"></span><span style="position: absolute; left: 10px; top: 0; width: 22px; height: 22px; border-radius: 999px; background: #2B7F86; opacity: 0.85"></span></span>
+<span class="disp" style="font-weight: 800; font-size: 20px; letter-spacing: -0.02em">Noobly Cloud</span>
+</a>
+<nav class="nav" aria-label="Main" style="display: flex; flex-direction: column; gap: 4px">
+<a href="Main.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Overview</a>
+<a href="VirtualMachines.dc.html" class="on" aria-current="page"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2"></rect><rect x="3" y="13" width="18" height="7" rx="2"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>Virtual machines</a>
+<a href="Apps.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg>Apps</a>
+<a href="Databases.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>Databases</a>
+<a href="Buckets.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.6 13.2a2 2 0 0 1-2 1.8H7.6a2 2 0 0 1-2-1.8L4 6z"></path><ellipse cx="12" cy="6" rx="8" ry="2.5"></ellipse></svg>Buckets</a>
+</nav>
+<div class="side-foot" style="margin-top: auto; display: flex; flex-direction: column; gap: 12px; padding: 16px; border: 1px solid #E6DED8; border-radius: 18px; background: #FFFFFF">
+<div class="cap">Cloud accounts</div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="prov prov-g">GCP</span><div><div style="font-size: 14px; font-weight: 600">stevie-prod</div><div style="font-size: 12.5px; color: #1C5A5F; font-weight: 600">Connected</div></div></div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="prov prov-a">AWS</span><div><div style="font-size: 14px; font-weight: 600">stevie-aws · 0932</div><div style="font-size: 12.5px; color: #1C5A5F; font-weight: 600">Connected</div></div></div>
+<a href="#" style="font-size: 13.5px; font-weight: 600">Manage accounts</a>
+</div>
+</aside>
+
+<main class="main">
+<div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px">
+<header>
+<nav class="crumb" aria-label="Breadcrumb"><a href="VirtualMachines.dc.html">Virtual machines</a><span aria-hidden="true">/</span><span>web-01</span></nav>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px"><h1 class="h1">web-01</h1><span class="pill p-ok" style="font-size: 13.5px; padding: 6px 12px"><span class="dot"></span>Running</span></div>
+<p style="margin: 10px 0 0; font-size: 17px; color: #6B605A; display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span class="prov prov-g">GCP</span>africa-south1-a · e2-medium · Ubuntu 24.04 LTS · up 18 days</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<button type="button" class="btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 9l3 3-3 3M13 15h4"></path></svg>Open SSH</button>
+<button type="button" class="btn">Stop</button>
+<a href="DeployApp.dc.html" class="btn btn-p"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"></circle><circle cx="6" cy="18" r="2.5"></circle><circle cx="18" cy="8" r="2.5"></circle><path d="M6 8.5v7M18 10.5c0 4-6 3-11.2 5.6"></path></svg>Deploy an app</a>
+</div>
+</div>
+</header>
+
+<section aria-label="Health" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+<div class="tile"><span class="cap">CPU · last hour</span><span class="tv">23%</span><div class="meter" role="img" aria-label="CPU 23%"><span style="width: 23%"></span></div></div>
+<div class="tile"><span class="cap">Memory</span><span class="tv">2.1 / 4 GB</span><div class="meter" role="img" aria-label="Memory 52%"><span style="width: 52%"></span></div></div>
+<div class="tile"><span class="cap">Disk</span><span class="tv">11 / 30 GB</span><div class="meter" role="img" aria-label="Disk 37%"><span style="width: 37%"></span></div></div>
+<div class="tile"><span class="cap">Requests · 24 h</span><span class="tv">48,210</span><span style="font-size: 13.5px; color: #6B605A">99.96% returned 2xx or 3xx</span></div>
+</section>
+
+<section class="card" aria-labelledby="ep-h">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px">
+<div><h2 id="ep-h" class="h2">HTTPS endpoints</h2><p style="margin: 4px 0 0; font-size: 14.5px; color: #6B605A">Public addresses that route to containers on this VM</p></div>
+<button type="button" class="btn btn-sm"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add endpoint</button>
+</div>
+<div style="overflow-x: auto">
+<table class="tbl">
+<thead><tr><th scope="col">Address</th><th scope="col">Routes to</th><th scope="col">Certificate</th><th scope="col">DNS</th><th scope="col"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Actions</span></th></tr></thead>
+<tbody>
+<tr><td><span style="display: flex; align-items: center; gap: 10px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color: #2B7F86"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg><a href="https://shop.example.com" class="mono" style="font-weight: 500">https://shop.example.com</a></span></td><td>storefront<span class="sub mono">container port 3000</span></td><td><span class="pill p-ok"><span class="dot"></span>Valid</span><span class="sub">Renews 14 Dec</span></td><td><span class="pill p-ok">Verified</span></td><td style="text-align: right"><button type="button" class="btn btn-sm">Edit</button></td></tr>
+<tr><td><span style="display: flex; align-items: center; gap: 10px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color: #2B7F86"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg><a href="https://blog.example.com" class="mono" style="font-weight: 500">https://blog.example.com</a></span></td><td>blog<span class="sub mono">container port 8080</span></td><td><span class="pill p-ok"><span class="dot"></span>Valid</span><span class="sub">Renews 2 Jan</span></td><td><span class="pill p-ok">Verified</span></td><td style="text-align: right"><button type="button" class="btn btn-sm">Edit</button></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="card" aria-labelledby="apps-h">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px">
+<div><h2 id="apps-h" class="h2">Apps on this VM</h2><p style="margin: 4px 0 0; font-size: 14.5px; color: #6B605A">Built from a Dockerfile in Git and run as containers</p></div>
+<a href="DeployApp.dc.html" class="btn btn-sm"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Deploy an app</a>
+</div>
+<div style="overflow-x: auto">
+<table class="tbl">
+<thead><tr><th scope="col">App</th><th scope="col">Repository</th><th scope="col">Commit</th><th scope="col">Status</th><th scope="col">Auto-deploy</th><th scope="col"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Actions</span></th></tr></thead>
+<tbody>
+<tr><td style="font-weight: 700">storefront<span class="sub" style="font-weight: 400">Deployed 12 min ago</span></td><td><span class="mono">github.com/stevie/storefront</span><span class="sub">main · ./Dockerfile</span></td><td class="mono">a1f3c9e</td><td><span class="pill p-ok"><span class="dot"></span>Live</span></td><td>On push to main</td><td style="text-align: right"><div style="display: flex; gap: 8px; justify-content: flex-end"><button type="button" class="btn btn-sm">Logs</button><button type="button" class="btn btn-sm">Redeploy</button></div></td></tr>
+<tr><td style="font-weight: 700">blog<span class="sub" style="font-weight: 400">Deployed 3 days ago</span></td><td><span class="mono">github.com/nooblyjs/blog</span><span class="sub">main · ./Dockerfile</span></td><td class="mono">5d20b8f</td><td><span class="pill p-ok"><span class="dot"></span>Live</span></td><td>Off</td><td style="text-align: right"><div style="display: flex; gap: 8px; justify-content: flex-end"><button type="button" class="btn btn-sm">Logs</button><button type="button" class="btn btn-sm">Redeploy</button></div></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 20px; align-items: start">
+<section class="card" aria-labelledby="det-h">
+<h2 id="det-h" class="h2" style="margin-bottom: 18px">Details</h2>
+<dl class="kv">
+<dt>Public IP</dt><dd class="mono">203.0.113.24 · static</dd>
+<dt>Private IP</dt><dd class="mono">10.10.0.12</dd>
+<dt>SSH</dt><dd><span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap"><code class="mono" style="background: #F5F1EE; border-radius: 8px; padding: 4px 8px">ssh ubuntu@203.0.113.24</code><button type="button" class="btn btn-sm btn-icon" aria-label="Copy SSH command"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path></svg></button></span></dd>
+<dt>SSH key</dt><dd>stevie-macbook · ed25519</dd>
+<dt>Open ports</dt><dd>22 (my IP only) · 80 · 443</dd>
+<dt>Runtime</dt><dd>Docker 27 · HTTPS proxy</dd>
+<dt>Created</dt><dd>2 Oct 2026 by Stevie</dd>
+<dt>Est. cost</dt><dd>$28 / month</dd>
+</dl>
+</section>
+
+<section class="card" aria-labelledby="log-h" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px"><h2 id="log-h" class="h2">Latest deploy · storefront</h2><span class="pill p-ok"><span class="dot"></span>Finished in 59s</span></div>
+<pre class="code"><span class="t">14:02:11</span>  Cloning github.com/stevie/storefront@main (a1f3c9e)
+<span class="t">14:02:14</span>  Building image from ./Dockerfile
+<span class="t">14:02:51</span>  Step 9/9 : CMD ["node", "server.js"]
+<span class="t">14:03:05</span>  Built storefront:a1f3c9e (212 MB)
+<span class="t">14:03:07</span>  Starting container on port 3000
+<span class="t">14:03:09</span>  Health check GET /healthz <span class="ok">200 OK</span>
+<span class="t">14:03:09</span>  Switched traffic from 9c04e1a
+<span class="t">14:03:10</span>  <span class="ok">Live at https://shop.example.com</span></pre>
+</section>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

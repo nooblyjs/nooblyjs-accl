@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Databases · Noobly Cloud</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&amp;family=Figtree:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F5F1EE;color:#241C1A;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#A63F1C}a:hover{color:#7E2E12}
+.disp{font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13.5px}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.nav a{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:12px;color:#4A3F3A;text-decoration:none;font-weight:600;font-size:14.5px}
+.nav a:hover{background:#F0E9E4;color:#241C1A}
+.nav a.on{background:#241C1A;color:#FFF8F2}
+.main{flex:999 1 560px;min-width:0;padding:40px 48px 64px;box-sizing:border-box}
+.h1{font-family:"Bricolage Grotesque",sans-serif;font-size:44px;line-height:1.05;font-weight:800;letter-spacing:-0.03em;margin:0}
+.h2{font-family:"Bricolage Grotesque",sans-serif;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;margin:0}
+.name{font-family:"Bricolage Grotesque",sans-serif;font-size:20px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;margin:0}
+.lead{margin:10px 0 0;font-size:17px;line-height:1.55;color:#6B605A}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:12px;font:600 14.5px Figtree,sans-serif;text-decoration:none;border:1px solid #DCD2CB;background:#FFFFFF;color:#241C1A;cursor:pointer;box-sizing:border-box;white-space:nowrap}
+.btn:hover{background:#F0E9E4;color:#241C1A}
+.btn-p{background:#C2471F;border-color:#C2471F;color:#FFFFFF}
+.btn-p:hover{background:#A63F1C;border-color:#A63F1C;color:#FFFFFF}
+.btn-sm{min-height:36px;padding:0 12px;font-size:13.5px}
+.btn-icon{width:36px;padding:0}
+.card{background:#FFFFFF;border:1px solid #E6DED8;border-radius:20px;padding:24px;box-sizing:border-box;min-width:0}
+.dbc{background:#FFFFFF;border:1px solid #E6DED8;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.dbc.sel{border-color:#C2471F;box-shadow:0 0 0 1px #C2471F}
+.cap{font-size:12.5px;font-weight:600;color:#6B605A}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.dot{width:7px;height:7px;border-radius:999px;background:currentColor}
+.p-ok{background:#DDEFEC;color:#1C5A5F}.p-warn{background:#FBEFD2;color:#6E4A0E}.p-off{background:#ECE6E1;color:#5E534D}
+.prov{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:24px;padding:0 6px;box-sizing:border-box;border-radius:8px;font:500 11px "JetBrains Mono",monospace;flex:none}
+.prov-g{background:#D6E4FA;color:#1F4A8A}.prov-a{background:#FBE6A6;color:#6B4E00}
+.eng{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:8px;font:600 12.5px Figtree,sans-serif}
+.eng-my{background:#E5DAF5;color:#4B2E83}.eng-mg{background:#DCE8C8;color:#3D5A1E}
+.meter{height:8px;border-radius:999px;background:#F0E9E4;overflow:hidden}
+.meter span{display:block;height:100%;border-radius:999px;background:#C2471F}
+.kv{display:grid;grid-template-columns:minmax(110px,160px) minmax(0,1fr);gap:14px 16px;font-size:15px;margin:0}
+.kv dt{color:#6B605A;font-weight:600;font-size:14px}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.codebox{display:flex;align-items:center;gap:10px;background:#F5F1EE;border:1px solid #E6DED8;border-radius:12px;padding:6px 6px 6px 14px;min-width:0}
+.codebox code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;font:400 13px "JetBrains Mono",monospace}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #E6DED8;margin-bottom:20px;flex-wrap:wrap}
+.tab{min-height:44px;padding:0 14px;border:0;background:transparent;font:600 14.5px Figtree,sans-serif;color:#6B605A;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer}
+.tab.on{color:#241C1A;border-bottom-color:#C2471F}
+@media (max-width:860px){.main{padding:24px 16px 48px}.h1{font-size:34px}.side-foot{display:none !important}}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F1EE">
+<aside aria-label="Sidebar" style="flex: 1 1 248px; box-sizing: border-box; background: #FBF8F6; border-right: 1px solid #E6DED8; padding: 24px 16px; display: flex; flex-direction: column; gap: 24px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 0 8px; min-height: 44px; text-decoration: none; color: #241C1A">
+<span aria-hidden="true" style="position: relative; width: 32px; height: 22px; flex: none"><span style="position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 999px; background: #C2471F"></span><span style="position: absolute; left: 10px; top: 0; width: 22px; height: 22px; border-radius: 999px; background: #2B7F86; opacity: 0.85"></span></span>
+<span class="disp" style="font-weight: 800; font-size: 20px; letter-spacing: -0.02em">Noobly Cloud</span>
+</a>
+<nav class="nav" aria-label="Main" style="display: flex; flex-direction: column; gap: 4px">
+<a href="Main.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Overview</a>
+<a href="VirtualMachines.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2"></rect><rect x="3" y="13" width="18" height="7" rx="2"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>Virtual machines</a>
+<a href="Apps.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg>Apps</a>
+<a href="Databases.dc.html" class="on" aria-current="page"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>Databases</a>
+<a href="Buckets.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.6 13.2a2 2 0 0 1-2 1.8H7.6a2 2 0 0 1-2-1.8L4 6z"></path><ellipse cx="12" cy="6" rx="8" ry="2.5"></ellipse></svg>Buckets</a>
+</nav>
+<div class="side-foot" style="margin-top: auto; display: flex; flex-direction: column; gap: 12px; padding: 16px; border: 1px solid #E6DED8; border-radius: 18px; background: #FFFFFF">
+<div class="cap">Cloud accounts</div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="prov prov-g">GCP</span><div><div style="font-size: 14px; font-weight: 600">stevie-prod</div><div style="font-size: 12.5px; color: #1C5A5F; font-weight: 600">Connected</div></div></div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="prov prov-a">AWS</span><div><div style="font-size: 14px; font-weight: 600">stevie-aws · 0932</div><div style="font-size: 12.5px; color: #1C5A5F; font-weight: 600">Connected</div></div></div>
+<a href="#" style="font-size: 13.5px; font-weight: 600">Manage accounts</a>
+</div>
+</aside>
+
+<main class="main">
+<div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px">
+<header style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div>
+<h1 class="h1">Databases</h1>
+<p class="lead">3 managed databases · 2 MySQL · 1 MongoDB · backed up daily</p>
+</div>
+<a href="CreateDatabase.dc.html" class="btn btn-p"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Create database</a>
+</header>
+
+<section aria-label="Database list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px">
+<article class="dbc sel">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span class="eng eng-my">MySQL 8.4</span><span class="pill p-ok"><span class="dot"></span>Available</span></div>
+<div><h2 class="name">orders-db</h2><p style="margin: 6px 0 0; font-size: 14px; color: #6B605A; display: flex; align-items: center; gap: 8px"><span class="prov prov-a">AWS</span>af-south-1 · 2 vCPU · 4 GB</p></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #6B605A">Storage</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">18 of 50 GB</span></div><div class="meter" role="img" aria-label="Storage 36% used"><span style="width: 36%"></span></div></div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: #6B605A; padding-top: 12px; border-top: 1px dashed #DCD2CB"><span>Used by orders-api</span><span>$62 / mo</span></div>
+</article>
+<article class="dbc">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span class="eng eng-mg">MongoDB 7.0</span><span class="pill p-ok"><span class="dot"></span>Available</span></div>
+<div><h2 class="name">catalog</h2><p style="margin: 6px 0 0; font-size: 14px; color: #6B605A; display: flex; align-items: center; gap: 8px"><span class="prov prov-g">GCP</span>africa-south1 · 2 vCPU · 4 GB</p></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #6B605A">Storage</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">7 of 20 GB</span></div><div class="meter" role="img" aria-label="Storage 35% used"><span style="width: 35%"></span></div></div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: #6B605A; padding-top: 12px; border-top: 1px dashed #DCD2CB"><span>Used by storefront</span><span>$58 / mo</span></div>
+</article>
+<article class="dbc">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span class="eng eng-my">MySQL 8.0</span><span class="pill p-warn"><span class="dot"></span>Backing up · 64%</span></div>
+<div><h2 class="name">analytics</h2><p style="margin: 6px 0 0; font-size: 14px; color: #6B605A; display: flex; align-items: center; gap: 8px"><span class="prov prov-g">GCP</span>africa-south1 · 4 vCPU · 16 GB</p></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; font-size: 14px"><span style="color: #6B605A">Storage</span><span style="font-weight: 600; font-variant-numeric: tabular-nums">126 of 200 GB</span></div><div class="meter" role="img" aria-label="Storage 63% used"><span style="width: 63%"></span></div></div>
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: #6B605A; padding-top: 12px; border-top: 1px dashed #DCD2CB"><span>Used by queue-worker</span><span>$96 / mo</span></div>
+</article>
+</section>
+
+<section class="card" aria-labelledby="d-h">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px">
+<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap"><h2 id="d-h" class="h2">orders-db</h2><span class="eng eng-my">MySQL 8.4</span></div>
+<div style="display: flex; gap: 12px; flex-wrap: wrap"><button type="button" class="btn btn-sm">Restore a backup</button><button type="button" class="btn btn-sm">Resize</button></div>
+</div>
+<div class="tabs" role="tablist" aria-label="Database sections">
+<button type="button" class="tab on" role="tab" aria-selected="true">Connect</button>
+<button type="button" class="tab" role="tab" aria-selected="false">Backups</button>
+<button type="button" class="tab" role="tab" aria-selected="false">Users</button>
+<button type="button" class="tab" role="tab" aria-selected="false">Metrics</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 18px; min-width: 0">
+<div><div class="cap" style="margin-bottom: 8px">Connection string</div><div class="codebox"><code>mysql://admin:••••••••••@10.20.0.8:3306/orders</code><button type="button" class="btn btn-sm">Reveal</button><button type="button" class="btn btn-sm btn-icon" aria-label="Copy connection string"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path></svg></button></div></div>
+<dl class="kv">
+<dt>Host</dt><dd class="mono">10.20.0.8 · private network</dd>
+<dt>Port</dt><dd class="mono">3306</dd>
+<dt>Database</dt><dd class="mono">orders</dd>
+<dt>Admin user</dt><dd class="mono">admin</dd>
+<dt>TLS</dt><dd>Required</dd>
+</dl>
+</div>
+<div style="display: flex; flex-direction: column; gap: 18px; min-width: 0">
+<div>
+<div class="cap" style="margin-bottom: 10px">Who can connect</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<span class="pill p-off" style="font-size: 13.5px; padding: 6px 12px">api-01</span>
+<span class="pill p-off" style="font-size: 13.5px; padding: 6px 12px">web-01</span>
+<button type="button" class="btn btn-sm">Allow another VM</button>
+</div>
+<p style="margin: 10px 0 0; font-size: 13.5px; color: #6B605A">Not reachable from the internet. VMs in other clouds connect over a private tunnel.</p>
+</div>
+<div>
+<div class="cap" style="margin-bottom: 10px">Backups</div>
+<p style="margin: 0; font-size: 15px">Daily at 02:00 · kept 7 days · last one 3.2 GB, today</p>
+</div>
+<div>
+<div class="cap" style="margin-bottom: 10px">Linked apps</div>
+<p style="margin: 0; font-size: 15px"><span class="mono">orders-api</span> as <span class="mono">DATABASE_URL</span></p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1250}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,41 +1,30 @@
 {
-  "name": "nooblyjs-apps-cloudservices",
-  "version": "1.0.0",
-  "description": "This repository holds the code for a micro-service that exposes multi cloud services which includes servers, database functionality etc",
+  "name": "nooblyjs-accelerator-infrastructure",
+  "version": "0.2.0",
+  "description": "Noobly Cloud: a NooblyJS accelerator (screens and API at /infrastructure) to launch and manage Linux VMs, apps from Git, databases and buckets on GCP and AWS.",
+  "license": "UNLICENSED",
+  "private": true,
+  "type": "module",
   "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./host": "./src/host/standalone.js"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon --watch src app.js",
-    "build": "npm install",
-    "clean": "rimraf coverage node_modules",
-    "test": "jest --passWithNoTests",
-    "coverage": "jest --passWithNoTests --coverage",
-    "kill": "  kill -9 $(lsof -t -i:3003)"
+    "start": "node --env-file-if-exists=.env server.js",
+    "seed": "node --env-file-if-exists=.env server.js --seed",
+    "test": "npm run test:express5 && npm run test:express4",
+    "test:express5": "node --test --test-timeout=20000 \"test/**/*.test.js\"",
+    "test:express4": "node --env-file=test/express4.env --test --test-timeout=20000 \"test/**/*.test.js\""
   },
   "dependencies": {
-    "@anthropic-ai/claude-code": "^1.0.81",
-    "@google/gemini-cli": "^0.2.1",
-    "bcryptjs": "^3.0.2",
-    "body-parser": "^1.20.2",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "mime-types": "^3.0.1",
-    "multer": "^2.0.0-rc.4",
-    "nooblyjs-core": "1.0.0",
-    "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0",
-    "passport-local": "^1.0.0",
-    "uuid": "^11.1.0"
+    "nooblyjs-core": "file:../../nooblyjs-core"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "jest": "^30.5.2",
-    "nodemon": "^3.1.10",
-    "rimraf": "^6.0.1"
-  },
-  "jest": {
-    "testEnvironment": "node"
+    "express": "^5.2.1",
+    "express4": "npm:express@^4.21.2"
   }
 }

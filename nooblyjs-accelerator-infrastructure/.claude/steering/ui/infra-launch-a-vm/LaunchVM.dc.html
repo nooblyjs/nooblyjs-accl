@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Launch a Linux VM · Noobly Cloud</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&amp;family=Figtree:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F5F1EE;color:#241C1A;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#A63F1C}a:hover{color:#7E2E12}
+.disp{font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13.5px}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.nav a{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:12px;color:#4A3F3A;text-decoration:none;font-weight:600;font-size:14.5px}
+.nav a:hover{background:#F0E9E4;color:#241C1A}
+.nav a.on{background:#241C1A;color:#FFF8F2}
+.main{flex:999 1 560px;min-width:0;padding:40px 48px 64px;box-sizing:border-box}
+.h1{font-family:"Bricolage Grotesque",sans-serif;font-size:44px;line-height:1.05;font-weight:800;letter-spacing:-0.03em;margin:0}
+.h2{font-family:"Bricolage Grotesque",sans-serif;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;margin:0;display:flex;align-items:center}
+.lead{margin:10px 0 0;font-size:17px;line-height:1.55;color:#6B605A}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:12px;font:600 14.5px Figtree,sans-serif;text-decoration:none;border:1px solid #DCD2CB;background:#FFFFFF;color:#241C1A;cursor:pointer;box-sizing:border-box;white-space:nowrap}
+.btn:hover{background:#F0E9E4;color:#241C1A}
+.btn-p{background:#C2471F;border-color:#C2471F;color:#FFFFFF}
+.btn-p:hover{background:#A63F1C;border-color:#A63F1C;color:#FFFFFF}
+.card{background:#FFFFFF;border:1px solid #E6DED8;border-radius:20px;padding:24px;box-sizing:border-box;min-width:0}
+.cap{font-size:12.5px;font-weight:600;color:#6B605A}
+.prov{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:24px;padding:0 6px;box-sizing:border-box;border-radius:8px;font:500 11px "JetBrains Mono",monospace;flex:none}
+.prov-g{background:#D6E4FA;color:#1F4A8A}.prov-a{background:#FBE6A6;color:#6B4E00}
+.crumb{font-size:14.5px;font-weight:600;color:#6B605A;display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.sec{background:#FFFFFF;border:1px solid #E6DED8;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:20px;min-width:0}
+.step{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:#241C1A;color:#FFF8F2;font:700 13px Figtree,sans-serif;margin-right:12px;flex:none}
+.lbl{display:block;font-size:14.5px;font-weight:600;margin:0 0 8px;padding:0;color:#241C1A}
+.inp{width:100%;box-sizing:border-box;min-height:44px;padding:0 14px;border:1px solid #DCD2CB;border-radius:12px;background:#FFFFFF;font:400 15px Figtree,sans-serif;color:#241C1A}
+textarea.inp{padding:12px 14px;min-height:88px;resize:vertical;font:400 13px/1.5 "JetBrains Mono",monospace}
+.inp:focus{outline:none;border-color:#C2471F;box-shadow:0 0 0 3px rgba(194,71,31,.28)}
+.help{font-size:13.5px;line-height:1.45;color:#6B605A;margin:6px 0 0}
+.grp{border:0;padding:0;margin:0;min-width:0}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid #DCD2CB;border-radius:18px;background:#FFFFFF;cursor:pointer;min-height:44px;box-sizing:border-box}
+.opt:hover{border-color:#C2471F}
+.opt:has(input:checked){border-color:#C2471F;background:#FFF4EE;box-shadow:0 0 0 1px #C2471F}
+.rad{accent-color:#C2471F;width:18px;height:18px;margin:2px 0 0;flex:none}
+.sw{appearance:none;-webkit-appearance:none;width:44px;height:26px;border-radius:999px;background:#DCD2CB;position:relative;cursor:pointer;margin:0;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:999px;background:#FFFFFF;transition:left .15s}
+.sw:checked{background:#2B7F86}.sw:checked::after{left:21px}
+.sw:focus-visible,.rad:focus-visible{outline:2px solid #C2471F;outline-offset:2px}
+.ot{display:block;font-weight:700;font-size:15.5px}
+.od{display:block;font-size:13.5px;color:#6B605A;margin-top:3px;line-height:1.4}
+.op{display:block;font-size:14px;font-weight:600;color:#241C1A;margin-top:8px;font-variant-numeric:tabular-nums}
+.sumrow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #F0E9E4;font-size:14.5px}
+.sumrow span:first-child{color:#6B605A}
+.sumrow span:last-child{font-weight:600;text-align:right}
+@media (max-width:860px){.main{padding:24px 16px 48px}.h1{font-size:34px}.side-foot{display:none !important}}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F1EE">
+<aside aria-label="Sidebar" style="flex: 1 1 248px; box-sizing: border-box; background: #FBF8F6; border-right: 1px solid #E6DED8; padding: 24px 16px; display: flex; flex-direction: column; gap: 24px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 0 8px; min-height: 44px; text-decoration: none; color: #241C1A">
+<span aria-hidden="true" style="position: relative; width: 32px; height: 22px; flex: none"><span style="position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 999px; background: #C2471F"></span><span style="position: absolute; left: 10px; top: 0; width: 22px; height: 22px; border-radius: 999px; background: #2B7F86; opacity: 0.85"></span></span>
+<span class="disp" style="font-weight: 800; font-size: 20px; letter-spacing: -0.02em">Noobly Cloud</span>
+</a>
+<nav class="nav" aria-label="Main" style="display: flex; flex-direction: column; gap: 4px">
+<a href="Main.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Overview</a>
+<a href="VirtualMachines.dc.html" class="on" aria-current="page"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2"></rect><rect x="3" y="13" width="18" height="7" rx="2"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>Virtual machines</a>
+<a href="Apps.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg>Apps</a>
+<a href="Databases.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>Databases</a>
+<a href="Buckets.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.6 13.2a2 2 0 0 1-2 1.8H7.6a2 2 0 0 1-2-1.8L4 6z"></path><ellipse cx="12" cy="6" rx="8" ry="2.5"></ellipse></svg>Buckets</a>
+</nav>
+<div class="side-foot" style="margin-top: auto; display: flex; flex-direction: column; gap: 12px; padding: 16px; border: 1px solid #E6DED8; border-radius: 18px; background: #FFFFFF">
+<div class="cap">Cloud accounts</div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="prov prov-g">GCP</span><div><div style="font-size: 14px; font-weight: 600">stevie-prod</div><div style="font-size: 12.5px; color: #1C5A5F; font-weight: 600">Connected</div></div></div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="prov prov-a">AWS</span><div><div style="font-size: 14px; font-weight: 600">stevie-aws · 0932</div><div style="font-size: 12.5px; color: #1C5A5F; font-weight: 600">Connected</div></div></div>
+<a href="#" style="font-size: 13.5px; font-weight: 600">Manage accounts</a>
+</div>
+</aside>
+
+<main class="main">
+<div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px">
+<header>
+<nav class="crumb" aria-label="Breadcrumb"><a href="VirtualMachines.dc.html">Virtual machines</a><span aria-hidden="true">/</span><span>Launch</span></nav>
+<h1 class="h1">Launch a Linux VM</h1>
+<p class="lead">Pick a cloud and a size. You can put it on a public HTTPS address now or later.</p>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+<form style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+
+<section class="sec" aria-labelledby="s1">
+<h2 id="s1" class="h2"><span class="step">1</span>Cloud and region</h2>
+<fieldset class="grp">
+<legend class="lbl">Cloud</legend>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+<label class="opt"><input class="rad" type="radio" name="cloud" checked=""><span><span style="display: flex; align-items: center; gap: 8px"><span class="prov prov-g">GCP</span><span class="ot">Google Cloud</span></span><span class="od">Project stevie-prod</span></span></label>
+<label class="opt"><input class="rad" type="radio" name="cloud"><span><span style="display: flex; align-items: center; gap: 8px"><span class="prov prov-a">AWS</span><span class="ot">Amazon Web Services</span></span><span class="od">Account stevie-aws · 0932</span></span></label>
+</div>
+</fieldset>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div><label class="lbl" for="region">Region</label><select id="region" class="inp"><option>africa-south1 · Johannesburg</option><option>europe-west2 · London</option><option>us-central1 · Iowa</option></select></div>
+<div><label class="lbl" for="zone">Zone</label><select id="zone" class="inp"><option>africa-south1-a</option><option>africa-south1-b</option><option>africa-south1-c</option></select></div>
+</div>
+</section>
+
+<section class="sec" aria-labelledby="s2">
+<h2 id="s2" class="h2"><span class="step">2</span>Machine</h2>
+<div style="max-width: 420px"><label class="lbl" for="vmname">Name</label><input id="vmname" class="inp mono" value="web-02"><p class="help">Lowercase letters, numbers and dashes.</p></div>
+<fieldset class="grp">
+<legend class="lbl">Size</legend>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px">
+<label class="opt"><input class="rad" type="radio" name="size"><span><span class="ot">Small</span><span class="od">2 vCPU · 2 GB<br>e2-small</span><span class="op">~$14 / mo</span></span></label>
+<label class="opt"><input class="rad" type="radio" name="size" checked=""><span><span class="ot">Medium</span><span class="od">2 vCPU · 4 GB<br>e2-medium</span><span class="op">~$28 / mo</span></span></label>
+<label class="opt"><input class="rad" type="radio" name="size"><span><span class="ot">Large</span><span class="od">4 vCPU · 16 GB<br>e2-standard-4</span><span class="op">~$112 / mo</span></span></label>
+<label class="opt"><input class="rad" type="radio" name="size"><span><span class="ot">Custom</span><span class="od">Choose any machine type</span></span></label>
+</div>
+</fieldset>
+</section>
+
+<section class="sec" aria-labelledby="s3">
+<h2 id="s3" class="h2"><span class="step">3</span>Image and disk</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div><label class="lbl" for="os">Linux image</label><select id="os" class="inp"><option>Ubuntu 24.04 LTS</option><option>Ubuntu 22.04 LTS</option><option>Debian 12</option><option>Rocky Linux 9</option></select></div>
+<div><label class="lbl" for="disk">Boot disk (GB, SSD)</label><input id="disk" class="inp" type="number" value="30" min="10"></div>
+</div>
+<label style="display: flex; gap: 14px; align-items: flex-start; cursor: pointer"><input class="sw" type="checkbox" role="switch" checked=""><span><span class="ot">Install Docker on first boot</span><span class="od">Needed to deploy apps from Git. Adds about 40 seconds to launch.</span></span></label>
+</section>
+
+<section class="sec" aria-labelledby="s4">
+<h2 id="s4" class="h2"><span class="step">4</span>Access</h2>
+<div><label class="lbl" for="key">SSH key</label><select id="key" class="inp"><option>stevie-macbook · ed25519 · added 2 Sep</option><option>Paste a new public key…</option></select></div>
+<div><label class="lbl" for="ssh-from">Allow SSH from</label><select id="ssh-from" class="inp"><option>My IP only · 196.25.x.x</option><option>Anywhere (not recommended)</option><option>Custom range…</option></select><p class="help">Ports 80 and 443 open automatically when you add an HTTPS endpoint.</p></div>
+</section>
+
+<section class="sec" aria-labelledby="s5">
+<h2 id="s5" class="h2"><span class="step">5</span>Public HTTPS endpoint</h2>
+<label style="display: flex; gap: 14px; align-items: flex-start; cursor: pointer"><input class="sw" type="checkbox" role="switch" checked=""><span><span class="ot">Make this VM reachable on HTTPS</span><span class="od">We point the address at the VM, issue a certificate and renew it before it expires.</span></span></label>
+<fieldset class="grp">
+<legend class="lbl">Address</legend>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<label class="opt"><input class="rad" type="radio" name="addr"><span style="flex: 1; min-width: 0"><span class="ot">Use a generated address</span><span class="od mono" style="font-size: 13px">web-02-k4p9.apps.[YOUR-DOMAIN]</span></span></label>
+<label class="opt"><input class="rad" type="radio" name="addr" checked=""><span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px"><span><span class="ot">Use my own domain</span><span class="od">You add one DNS record. We check it every minute.</span></span>
+<input aria-label="Domain" class="inp mono" value="shop2.example.com">
+<span style="display: block; border: 1px dashed #DCD2CB; border-radius: 12px; padding: 12px 14px; font-size: 13.5px; line-height: 1.6; color: #4A3F3A">Add at your DNS host: <span class="mono" style="font-size: 13px; color: #241C1A">CNAME shop2 → web-02-k4p9.apps.[YOUR-DOMAIN]</span></span>
+</span></label>
+</div>
+</fieldset>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+<div><label class="lbl" for="port">Send traffic to port</label><input id="port" class="inp" type="number" value="80"><p class="help">Apps you deploy later can claim their own path or domain.</p></div>
+<div><label class="lbl" for="cert">Certificate</label><select id="cert" class="inp"><option>Free, auto-renewing (Let’s Encrypt)</option><option>Upload my own</option></select></div>
+</div>
+<label style="display: flex; gap: 14px; align-items: center; cursor: pointer"><input class="sw" type="checkbox" role="switch" checked=""><span class="ot" style="font-weight: 600; font-size: 15px">Redirect HTTP to HTTPS</span></label>
+</section>
+</form>
+
+<aside aria-labelledby="sum-h" class="card" style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 4px">
+<h2 id="sum-h" class="h2" style="margin-bottom: 8px">Summary</h2>
+<div class="sumrow"><span>Cloud</span><span>GCP · africa-south1-a</span></div>
+<div class="sumrow"><span>Name</span><span class="mono">web-02</span></div>
+<div class="sumrow"><span>Size</span><span>e2-medium · 2 vCPU · 4 GB</span></div>
+<div class="sumrow"><span>Image</span><span>Ubuntu 24.04 LTS · 30 GB</span></div>
+<div class="sumrow"><span>Docker</span><span>Installed</span></div>
+<div class="sumrow"><span>Endpoint</span><span class="mono">shop2.example.com</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 0 8px"><span class="cap" style="font-size: 14px">Est. per month</span><span class="disp" style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">$30</span></div>
+<p style="margin: 0 0 16px; font-size: 13.5px; color: #6B605A">VM $28 · disk $2 · billed by GCP to stevie-prod</p>
+<a href="VMDetail.dc.html" class="btn btn-p" style="width: 100%">Launch VM</a>
+<p style="margin: 10px 0 0; font-size: 13.5px; color: #6B605A; text-align: center">Ready in about 2 minutes</p>
+</aside>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1750}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

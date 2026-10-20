@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create a database · Noobly Cloud</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&amp;family=Figtree:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F5F1EE;color:#241C1A;font-family:Figtree,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#A63F1C}a:hover{color:#7E2E12}
+.disp{font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13.5px}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.nav a{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 12px;border-radius:12px;color:#4A3F3A;text-decoration:none;font-weight:600;font-size:14.5px}
+.nav a:hover{background:#F0E9E4;color:#241C1A}
+.nav a.on{background:#241C1A;color:#FFF8F2}
+.main{flex:999 1 560px;min-width:0;padding:40px 48px 64px;box-sizing:border-box}
+.h1{font-family:"Bricolage Grotesque",sans-serif;font-size:44px;line-height:1.05;font-weight:800;letter-spacing:-0.03em;margin:0}
+.h2{font-family:"Bricolage Grotesque",sans-serif;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-0.01em;margin:0;display:flex;align-items:center}
+.lead{margin:10px 0 0;font-size:17px;line-height:1.55;color:#6B605A}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:12px;font:600 14.5px Figtree,sans-serif;text-decoration:none;border:1px solid #DCD2CB;background:#FFFFFF;color:#241C1A;cursor:pointer;box-sizing:border-box;white-space:nowrap}
+.btn:hover{background:#F0E9E4;color:#241C1A}
+.btn-p{background:#C2471F;border-color:#C2471F;color:#FFFFFF}
+.btn-p:hover{background:#A63F1C;border-color:#A63F1C;color:#FFFFFF}
+.card{background:#FFFFFF;border:1px solid #E6DED8;border-radius:20px;padding:24px;box-sizing:border-box;min-width:0}
+.cap{font-size:12.5px;font-weight:600;color:#6B605A}
+.prov{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:24px;padding:0 6px;box-sizing:border-box;border-radius:8px;font:500 11px "JetBrains Mono",monospace;flex:none}
+.prov-g{background:#D6E4FA;color:#1F4A8A}.prov-a{background:#FBE6A6;color:#6B4E00}
+.eng{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;flex:none}
+.eng-my{background:#E5DAF5;color:#4B2E83}.eng-mg{background:#DCE8C8;color:#3D5A1E}
+.crumb{font-size:14.5px;font-weight:600;color:#6B605A;display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.sec{background:#FFFFFF;border:1px solid #E6DED8;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:20px;min-width:0}
+.step{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:#241C1A;color:#FFF8F2;font:700 13px Figtree,sans-serif;margin-right:12px;flex:none}
+.lbl{display:block;font-size:14.5px;font-weight:600;margin:0 0 8px;padding:0;color:#241C1A}
+.inp{width:100%;box-sizing:border-box;min-height:44px;padding:0 14px;border:1px solid #DCD2CB;border-radius:12px;background:#FFFFFF;font:400 15px Figtree,sans-serif;color:#241C1A}
+.inp:focus{outline:none;border-color:#C2471F;box-shadow:0 0 0 3px rgba(194,71,31,.28)}
+.inp.mono{font:400 14px "JetBrains Mono",monospace}
+.help{font-size:13.5px;line-height:1.45;color:#6B605A;margin:6px 0 0}
+.grp{border:0;padding:0;margin:0;min-width:0}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:16px;border:1px solid #DCD2CB;border-radius:18px;background:#FFFFFF;cursor:pointer;min-height:44px;box-sizing:border-box}
+.opt:hover{border-color:#C2471F}
+.opt:has(input:checked){border-color:#C2471F;background:#FFF4EE;box-shadow:0 0 0 1px #C2471F}
+.rad{accent-color:#C2471F;width:18px;height:18px;margin:2px 0 0;flex:none}
+.chk{accent-color:#C2471F;width:18px;height:18px;margin:0;flex:none}
+.sw{appearance:none;-webkit-appearance:none;width:44px;height:26px;border-radius:999px;background:#DCD2CB;position:relative;cursor:pointer;margin:0;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:999px;background:#FFFFFF;transition:left .15s}
+.sw:checked{background:#2B7F86}.sw:checked::after{left:21px}
+.sw:focus-visible,.rad:focus-visible,.chk:focus-visible{outline:2px solid #C2471F;outline-offset:2px}
+.ot{display:block;font-weight:700;font-size:15.5px}
+.od{display:block;font-size:13.5px;color:#6B605A;margin-top:3px;line-height:1.4}
+.op{display:block;font-size:14px;font-weight:600;color:#241C1A;margin-top:8px;font-variant-numeric:tabular-nums}
+.sumrow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #F0E9E4;font-size:14.5px}
+.sumrow span:first-child{color:#6B605A}
+.sumrow span:last-child{font-weight:600;text-align:right}
+.vmrow{display:flex;align-items:center;gap:12px;min-height:44px;padding:0 14px;border:1px solid #E6DED8;border-radius:12px;cursor:pointer}
+@media (max-width:860px){.main{padding:24px 16px 48px}.h1{font-size:34px}.side-foot{display:none !important}}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F1EE">
+<aside aria-label="Sidebar" style="flex: 1 1 248px; box-sizing: border-box; background: #FBF8F6; border-right: 1px solid #E6DED8; padding: 24px 16px; display: flex; flex-direction: column; gap: 24px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 0 8px; min-height: 44px; text-decoration: none; color: #241C1A">
+<span aria-hidden="true" style="position: relative; width: 32px; height: 22px; flex: none"><span style="position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 999px; background: #C2471F"></span><span style="position: absolute; left: 10px; top: 0; width: 22px; height: 22px; border-radius: 999px; background: #2B7F86; opacity: 0.85"></span></span>
+<span class="disp" style="font-weight: 800; font-size: 20px; letter-spacing: -0.02em">Noobly Cloud</span>
+</a>
+<nav class="nav" aria-label="Main" style="display: flex; flex-direction: column; gap: 4px">
+<a href="Main.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Overview</a>
+<a href="VirtualMachines.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2"></rect><rect x="3" y="13" width="18" height="7" rx="2"></rect><path d="M7 7.5h.01M7 16.5h.01"></path></svg>Virtual machines</a>
+<a href="Apps.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg>Apps</a>
+<a href="Databases.dc.html" class="on" aria-current="page"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg>Databases</a>
+<a href="Buckets.dc.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.6 13.2a2 2 0 0 1-2 1.8H7.6a2 2 0 0 1-2-1.8L4 6z"></path><ellipse cx="12" cy="6" rx="8" ry="2.5"></ellipse></svg>Buckets</a>
+</nav>
+<div class="side-foot" style="margin-top: auto; display: flex; flex-direction: column; gap: 12px; padding: 16px; border: 1px solid #E6DED8; border-radius: 18px; background: #FFFFFF">
+<div class="cap">Cloud accounts</div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="prov prov-g">GCP</span><div><div style="font-size: 14px; font-weight: 600">stevie-prod</div><div style="font-size: 12.5px; color: #1C5A5F; font-weight: 600">Connected</div></div></div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="prov prov-a">AWS</span><div><div style="font-size: 14px; font-weight: 600">stevie-aws · 0932</div><div style="font-size: 12.5px; color: #1C5A5F; font-weight: 600">Connected</div></div></div>
+<a href="#" style="font-size: 13.5px; font-weight: 600">Manage accounts</a>
+</div>
+</aside>
+
+<main class="main">
+<div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px">
+<header>
+<nav class="crumb" aria-label="Breadcrumb"><a href="Databases.dc.html">Databases</a><span aria-hidden="true">/</span><span>Create</span></nav>
+<h1 class="h1">Create a database</h1>
+<p class="lead">A managed MySQL or MongoDB server. We handle patches, backups and certificates.</p>
+</header>
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+<form style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+
+<section class="sec" aria-labelledby="s1">
+<h2 id="s1" class="h2"><span class="step">1</span>Engine</h2>
+<fieldset class="grp">
+<legend class="lbl">Database engine</legend>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px">
+<label class="opt" style="align-items: center"><input class="rad" type="radio" name="eng" checked="" style="margin: 0"><span class="eng eng-my" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path></svg></span><span><span class="ot">MySQL</span><span class="od">Relational · tables and SQL</span></span></label>
+<label class="opt" style="align-items: center"><input class="rad" type="radio" name="eng" style="margin: 0"><span class="eng eng-mg" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3c3 3.5 4.5 7 4.5 10.5S14.5 19 12 21c-2.5-2-4.5-4-4.5-7.5S9 6.5 12 3z"></path><path d="M12 9v12"></path></svg></span><span><span class="ot">MongoDB</span><span class="od">Document · JSON collections</span></span></label>
+</div>
+</fieldset>
+<div style="max-width: 360px"><label class="lbl" for="ver">Version</label><select id="ver" class="inp"><option>MySQL 8.4 LTS</option><option>MySQL 8.0</option></select></div>
+</section>
+
+<section class="sec" aria-labelledby="s2">
+<h2 id="s2" class="h2"><span class="step">2</span>Cloud and name</h2>
+<fieldset class="grp">
+<legend class="lbl">Cloud</legend>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+<label class="opt"><input class="rad" type="radio" name="cloud" checked=""><span><span style="display: flex; align-items: center; gap: 8px"><span class="prov prov-g">GCP</span><span class="ot">Google Cloud</span></span><span class="od">Runs on Cloud SQL / managed MongoDB</span></span></label>
+<label class="opt"><input class="rad" type="radio" name="cloud"><span><span style="display: flex; align-items: center; gap: 8px"><span class="prov prov-a">AWS</span><span class="ot">Amazon Web Services</span></span><span class="od">Runs on RDS / managed MongoDB</span></span></label>
+</div>
+</fieldset>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px">
+<div><label class="lbl" for="region">Region</label><select id="region" class="inp"><option>africa-south1 · Johannesburg</option><option>europe-west2 · London</option></select><p class="help">Put it in the same region as the VMs that use it.</p></div>
+<div><label class="lbl" for="dbname">Name</label><input id="dbname" class="inp mono" value="customers-db"></div>
+</div>
+</section>
+
+<section class="sec" aria-labelledby="s3">
+<h2 id="s3" class="h2"><span class="step">3</span>Size and storage</h2>
+<fieldset class="grp">
+<legend class="lbl">Server size</legend>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px">
+<label class="opt"><input class="rad" type="radio" name="size"><span><span class="ot">Starter</span><span class="od">1 vCPU · 2 GB<br>Side projects and staging</span><span class="op">~$26 / mo</span></span></label>
+<label class="opt"><input class="rad" type="radio" name="size" checked=""><span><span class="ot">Standard</span><span class="od">2 vCPU · 4 GB<br>Most production apps</span><span class="op">~$52 / mo</span></span></label>
+<label class="opt"><input class="rad" type="radio" name="size"><span><span class="ot">Performance</span><span class="od">4 vCPU · 16 GB<br>Heavy reads and reporting</span><span class="op">~$190 / mo</span></span></label>
+</div>
+</fieldset>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; align-items: start">
+<div><label class="lbl" for="stor">Storage (GB, SSD)</label><input id="stor" class="inp" type="number" value="20" min="10"></div>
+<label style="display: flex; gap: 14px; align-items: flex-start; cursor: pointer; padding-top: 30px"><input class="sw" type="checkbox" role="switch" checked=""><span><span class="ot">Grow storage automatically</span><span class="od">Adds 10 GB when 90% full</span></span></label>
+</div>
+<label style="display: flex; gap: 14px; align-items: flex-start; cursor: pointer"><input class="sw" type="checkbox" role="switch"><span><span class="ot">High availability</span><span class="od">Keeps a standby copy in another zone and fails over in about a minute. Doubles the server cost.</span></span></label>
+</section>
+
+<section class="sec" aria-labelledby="s4">
+<h2 id="s4" class="h2"><span class="step">4</span>Access and backups</h2>
+<fieldset class="grp">
+<legend class="lbl">Network access</legend>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<label class="opt"><input class="rad" type="radio" name="net" checked=""><span><span class="ot">Private · only my VMs</span><span class="od">No public address. Recommended.</span></span></label>
+<label class="opt"><input class="rad" type="radio" name="net"><span><span class="ot">Public, with an IP allowlist</span><span class="od">For connecting from your laptop or tools outside the cloud.</span></span></label>
+</div>
+</fieldset>
+<fieldset class="grp">
+<legend class="lbl">VMs that can connect</legend>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px">
+<label class="vmrow"><input class="chk" type="checkbox" checked=""><span class="prov prov-g">GCP</span><span style="font-weight: 600">web-01</span></label>
+<label class="vmrow"><input class="chk" type="checkbox"><span class="prov prov-a">AWS</span><span style="font-weight: 600">api-01</span></label>
+<label class="vmrow"><input class="chk" type="checkbox"><span class="prov prov-g">GCP</span><span style="font-weight: 600">worker-01</span></label>
+</div>
+</fieldset>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+<div><label class="lbl" for="bk">Daily backup at</label><select id="bk" class="inp"><option>02:00 SAST</option><option>04:00 SAST</option></select></div>
+<div><label class="lbl" for="keep">Keep backups for</label><select id="keep" class="inp"><option>7 days</option><option>14 days</option><option>30 days</option></select></div>
+<div><label class="lbl" for="admin">Admin user</label><input id="admin" class="inp mono" value="admin"><p class="help">We generate the password and store it as a secret.</p></div>
+</div>
+</section>
+</form>
+
+<aside aria-labelledby="sum-h" class="card" style="flex: 1 1 320px; display: flex; flex-direction: column; gap: 4px">
+<h2 id="sum-h" class="h2" style="margin-bottom: 8px">Summary</h2>
+<div class="sumrow"><span>Engine</span><span>MySQL 8.4 LTS</span></div>
+<div class="sumrow"><span>Cloud</span><span>GCP · africa-south1</span></div>
+<div class="sumrow"><span>Name</span><span class="mono">customers-db</span></div>
+<div class="sumrow"><span>Size</span><span>Standard · 2 vCPU · 4 GB</span></div>
+<div class="sumrow"><span>Storage</span><span>20 GB, grows</span></div>
+<div class="sumrow"><span>Access</span><span>Private · web-01</span></div>
+<div class="sumrow"><span>Backups</span><span>Daily · 7 days</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding: 18px 0 8px"><span class="cap" style="font-size: 14px">Est. per month</span><span class="disp" style="font-size: 32px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums">$56</span></div>
+<p style="margin: 0 0 16px; font-size: 13.5px; color: #6B605A">Server $52 · storage $3 · backups $1</p>
+<a href="Databases.dc.html" class="btn btn-p" style="width: 100%">Create database</a>
+<p style="margin: 10px 0 0; font-size: 13.5px; color: #6B605A; text-align: center">Ready in about 6 minutes</p>
+</aside>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
