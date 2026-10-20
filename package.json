@@ -23,6 +23,16 @@
     "coverage": "node scripts/run-all.js coverage"
   },
   "devDependencies": {
-    "rimraf": "^6.0.1"
+    "rimraf": "^6.0.1",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^9.0.3",
+    "mime-types": "^3.0.1",
+    "multer": "^2.0.0-rc.4",
+    "nooblyjs-core": "file:../../nooblyjs-core",
+    "uuid": "^11.1.0"
   }
 }
