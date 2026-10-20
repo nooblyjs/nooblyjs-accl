@@ -1,0 +1,12 @@
+account: stevie-aws
+cloud: aws
+resources:
+  - { id: net-seedaws1, kind: network, name: noobly-cloud, region: af-south-1, status: ready, labels: { managed-by: noobly-cloud, noobly-install: nc-seed01, noobly-name: noobly-cloud }, createdAt: '{{ago:29d}}' }
+  - { id: ip-seedapi01, kind: address, region: af-south-1, address: 198.51.100.31, status: in-use, labels: { managed-by: noobly-cloud, noobly-install: nc-seed01, noobly-name: api-01 }, createdAt: '{{ago:25d}}' }
+  - { id: ip-seedstg01, kind: address, region: af-south-1, address: 198.51.100.77, status: in-use, labels: { managed-by: noobly-cloud, noobly-install: nc-seed01, noobly-name: staging-01 }, createdAt: '{{ago:27d}}' }
+  - { id: vm-seedapi01, kind: vm, name: api-01, zone: af-south-1a, region: af-south-1, machineType: t3.medium, image: ubuntu-2404-lts, diskGb: 30, status: running, publicIp: 198.51.100.31, privateIp: 10.20.0.15, firewall: [], labels: { managed-by: noobly-cloud, noobly-install: nc-seed01, noobly-name: api-01 }, createdAt: '{{ago:25d}}' }
+  - { id: vm-seedstg01, kind: vm, name: staging-01, zone: af-south-1b, region: af-south-1, machineType: t3.small, image: ubuntu-2404-lts, diskGb: 40, status: stopped, publicIp: 198.51.100.77, privateIp: 10.20.0.22, firewall: [], labels: { managed-by: noobly-cloud, noobly-install: nc-seed01, noobly-name: staging-01 }, createdAt: '{{ago:27d}}' }
+  - { id: db-seedorders, kind: database, name: orders-db, engine: mysql, region: af-south-1, status: available, storageUsedGb: 18, host: 10.20.0.8, labels: { managed-by: noobly-cloud, noobly-install: nc-seed01, noobly-name: orders-db }, createdAt: '{{ago:24d}}' }
+  - { id: bk-seedexports, kind: bucket, name: orders-exports, region: af-south-1, status: ready, bytes: 41000000000, objects: 2190, labels: { managed-by: noobly-cloud, noobly-install: nc-seed01, noobly-name: orders-exports }, createdAt: '{{ago:24d}}' }
+  - { id: bk-seedbackups, kind: bucket, name: backups-db, region: af-south-1, status: ready, bytes: 16000000000, objects: 96, labels: { managed-by: noobly-cloud, noobly-install: nc-seed01, noobly-name: backups-db }, createdAt: '{{ago:24d}}' }
+operations: []

@@ -1,0 +1,8 @@
+keys:
+  - id: key_seedmacbook
+    name: stevie-macbook
+    type: ed25519
+    publicKey: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGq7Xw2bmZcV4pM1kQ9nT6sR0uY3eW8aH5jL2fD7cB1x stevie@macbook
+    fingerprint: SHA256:q8Jm2dX5vR1kT7nW4pZ9cY3bH6sL0fG2eA8uV5iO1tE
+    addedBy: stevie
+    addedAt: '{{ago:48d}}'

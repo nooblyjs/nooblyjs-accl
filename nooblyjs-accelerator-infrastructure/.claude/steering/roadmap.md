@@ -50,18 +50,18 @@ mounts nothing.
 
 Goal: everything the resource screens stand on, plus the Overview, on the mock provider.
 
-- [ ] 1.1 Provider contract (`src/providers/contract.js`) and registry (per-account instances, lazy SDK loading).
-- [ ] 1.2 Mock provider: in-memory cloud, timings, failure injection, out-of-band changes (§6.3).
-- [ ] 1.3 Records and repos for accounts, VMs, endpoints, apps, deploys, databases, buckets, operations, ssh keys, activity, config (§5).
-- [ ] 1.4 Operations engine: queue, steps, per-account concurrency, one-at-a-time per resource, recover, cancel, retry, events (§7).
-- [ ] 1.5 Scheduled job runner (host clock, `unref`, stopped by `close()`), with the inventory sync and account check jobs (§8).
-- [ ] 1.6 Secrets service over nooblyjs-core encrypted settings; log scrubbing (§10).
-- [ ] 1.7 Catalogue (`gcp.yaml`, `aws.yaml` with `asOf`) and `public/js/shared/estimate.js`; `GET /catalog`; tests against the mockups' figures (§12).
-- [ ] 1.8 Activity: `withWords()` sentences for every event type; `GET /activity`; Activity page.
-- [ ] 1.9 Cloud accounts on mock: API, sidebar status card ("Connected"), **Accounts page** (needs a design; build from kit components until then). The Git connections section of that page comes in phase 6.
-- [ ] 1.10 Seed story reproducing the mockups (product.md §9), records + mock cloud state; `npm run seed [-- --reset]`.
-- [ ] 1.11 **Overview** page (`Main.dc.html`): totals, create tiles, HTTPS endpoints, recent activity, spend this month.
-- [ ] 1.12 App components shared by all screens: `cloudBadge`, `engineBadge`, `kv`, `copyField`, `confirmDialog`, `actionsMenu` (§11.3).
+- [x] 1.1 Provider contract (`src/providers/contract.js`) and registry (per-account instances, lazy SDK loading).
+- [x] 1.2 Mock provider: in-memory cloud, timings, failure injection, out-of-band changes (§6.3).
+- [x] 1.3 Records and repos for accounts, VMs, endpoints, apps, deploys, databases, buckets, operations, ssh keys, activity, config (§5).
+- [x] 1.4 Operations engine: queue, steps, per-account concurrency, one-at-a-time per resource, recover, cancel, retry, events (§7).
+- [x] 1.5 Scheduled job runner (host clock, `unref`, stopped by `close()`), with the inventory sync and account check jobs (§8).
+- [x] 1.6 Secrets service (AES-256-GCM files in `secrets/`, not the nooblyjs-core settings service, which serves values over HTTP: architecture D13); log scrubbing (§10).
+- [x] 1.7 Catalogue (`gcp.yaml`, `aws.yaml` with `asOf`) and `public/js/shared/estimate.js`; `GET /catalog`; tests against the mockups' figures (§12).
+- [x] 1.8 Activity: `withWords()` sentences for every event type; `GET /activity`; Activity page.
+- [x] 1.9 Cloud accounts on mock: API, sidebar status card ("Connected"), **Accounts page** (needs a design; build from kit components until then). The Git connections section of that page comes in phase 6.
+- [x] 1.10 Seed story reproducing the mockups (product.md §9), records + mock cloud state; `npm run seed [-- --reset]`.
+- [x] 1.11 **Overview** page (`Main.dc.html`): totals, create tiles, HTTPS endpoints, recent activity, spend this month.
+- [x] 1.12 App components shared by all screens: `cloudBadge`, `engineBadge`, `kv`, `copyField`, `confirmDialog`, `actionsMenu` (§11.3).
 
 **Exit check:** after `npm run seed`, the Overview matches `Main.dc.html` with computed numbers; killing the server
 mid-operation and restarting resumes it with no duplicate mock resource.
@@ -81,6 +81,7 @@ Goal: launch, see and run Linux VMs, first on mock, then on GCP, then on AWS.
 - [ ] 2.9 **AWS compute adapter**: VPC, EC2, Elastic IP and the public DNS name, security group, AMIs via SSM, EBS data volumes and resize, CloudWatch CPU; contract suite passes against a sandbox account.
 - [ ] 2.10 Real account connection for GCP (service account JSON) and AWS (AssumeRole + ExternalId), with a documented least-privilege role for each.
 - [ ] 2.11 VM memory/disk health over SSH; 60 s cache.
+- [ ] 2.12 Cost snapshot job: accrue each hour at the rate of the state a resource was in (architecture §8, §12).
 
 **Exit check:** on a real GCP project and a real AWS account, a Contributor launches an Ubuntu 24.04 VM with Docker
 from the form, sees it go Starting 1→2 of 3 → Running live, SSHes in with the shown command, stops and starts it

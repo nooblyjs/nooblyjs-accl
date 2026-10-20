@@ -1,0 +1,90 @@
+---
+at: '{{ago:30d}}'
+type: infrastructure.account.connected
+verb: Connected
+tone: success
+text: GCP account stevie-prod
+summary: connected GCP account stevie-prod
+actor: stevie
+resource: { type: account, name: stevie-prod }
+account: stevie-prod
+---
+at: '{{ago:29d}}'
+type: infrastructure.account.connected
+verb: Connected
+tone: success
+text: AWS account stevie-aws
+summary: connected AWS account stevie-aws
+actor: stevie
+resource: { type: account, name: stevie-aws }
+account: stevie-aws
+---
+at: '{{ago:18d}}'
+type: infrastructure.vm.created
+verb: Created
+tone: info
+text: VM web-01 · GCP africa-south1
+summary: created VM web-01 · GCP africa-south1
+actor: stevie
+resource: { type: vm, name: web-01 }
+account: stevie-prod
+---
+at: '{{ago:3d}}'
+type: infrastructure.app.deployed
+verb: Deployed
+tone: success
+text: blog 5d20b8f to web-01
+summary: deployed blog 5d20b8f to web-01
+actor: stevie
+resource: { type: app, name: blog }
+account: stevie-prod
+---
+at: '{{ago:1d}}'
+type: infrastructure.vm.stopped
+verb: Stopped
+tone: neutral
+text: VM staging-01
+summary: stopped VM staging-01
+actor: stevie
+resource: { type: vm, name: staging-01 }
+account: stevie-aws
+---
+at: '{{today:02:00}}'
+type: infrastructure.database.backed_up
+verb: Backup
+tone: success
+text: orders-db · 3.2 GB snapshot
+summary: backed up orders-db (3.2 GB)
+actor: null
+resource: { type: database, name: orders-db }
+account: stevie-aws
+---
+at: '{{ago:12m}}'
+type: infrastructure.app.deployed
+verb: Deployed
+tone: success
+text: storefront a1f3c9e to web-01
+summary: deployed storefront a1f3c9e to web-01
+actor: null
+resource: { type: app, name: storefront }
+account: stevie-prod
+---
+at: '{{ago:4m}}'
+type: infrastructure.vm.created
+verb: Created
+tone: info
+text: VM docs-01 · GCP africa-south1
+summary: created VM docs-01 · GCP africa-south1
+actor: stevie
+resource: { type: vm, name: docs-01 }
+account: stevie-prod
+---
+at: '{{ago:0m}}'
+type: infrastructure.app.building
+verb: Building
+tone: warning
+text: docs 77be014 on docs-01
+summary: started building docs 77be014 on docs-01
+actor: stevie
+resource: { type: app, name: docs }
+account: stevie-prod

@@ -1,0 +1,73 @@
+# What Noobly Cloud offers on Google Cloud, and what it costs (architecture.md §12). Prices are USD; `hourly` for
+# machines and database servers (730 hours a month), per GB-month for disks, storage and backups. `priceFactor`
+# scales every price in a region.
+cloud: gcp
+label: Google Cloud
+short: GCP
+asOf: '2026-10-20'
+currency: USD
+source: >-
+  Illustrative prices that reproduce the design mockups. Not yet checked against Google's price list; a refresh
+  script will regenerate them from the Cloud Billing Catalog API (roadmap 7.5). External IP addresses are not priced.
+regions:
+  - id: africa-south1
+    label: Johannesburg
+    zones: [africa-south1-a, africa-south1-b, africa-south1-c]
+    priceFactor: 1
+  - id: europe-west2
+    label: London
+    zones: [europe-west2-a, europe-west2-b, europe-west2-c]
+    priceFactor: 0.95
+  - id: us-central1
+    label: Iowa
+    zones: [us-central1-a, us-central1-b, us-central1-c, us-central1-f]
+    priceFactor: 0.85
+# The Launch VM size cards.
+sizes:
+  small: e2-small
+  medium: e2-medium
+  large: e2-standard-4
+machineTypes:
+  e2-small: { vcpu: 2, memoryGb: 2, hourly: 0.019178 }
+  e2-medium: { vcpu: 2, memoryGb: 4, hourly: 0.038356 }
+  e2-standard-2: { vcpu: 2, memoryGb: 8, hourly: 0.076712 }
+  e2-standard-4: { vcpu: 4, memoryGb: 16, hourly: 0.153425 }
+images:
+  - { id: ubuntu-2404-lts, label: Ubuntu 24.04 LTS, source: ubuntu-os-cloud/ubuntu-2404-lts-amd64 }
+  - { id: ubuntu-2204-lts, label: Ubuntu 22.04 LTS, source: ubuntu-os-cloud/ubuntu-2204-lts }
+  - { id: debian-12, label: Debian 12, source: debian-cloud/debian-12 }
+  - { id: rocky-linux-9, label: Rocky Linux 9, source: rocky-linux-cloud/rocky-linux-9 }
+disk:
+  ssdGbMonth: 0.068
+  minGb: 10
+databases:
+  mysql:
+    runsOn: Cloud SQL
+    versions:
+      - { id: '8.4', label: MySQL 8.4 LTS }
+      - { id: '8.0', label: MySQL 8.0 }
+    tiers:
+      starter: { class: db-g1-small, vcpu: 1, memoryGb: 2, hourly: 0.035616 }
+      standard: { class: db-custom-2-4096, vcpu: 2, memoryGb: 4, hourly: 0.071233 }
+      performance: { class: db-custom-4-16384, vcpu: 4, memoryGb: 16, hourly: 0.260274 }
+    storageGbMonth: 0.15
+    backupGbMonth: 0.05
+    haFactor: 2
+  mongodb:
+    runsOn: a VM we launch and look after
+    versions:
+      - { id: '7.0', label: MongoDB 7.0 }
+    # A MongoDB database is a VM of this machine type, a boot disk, a data disk and daily dumps in a bucket.
+    tiers:
+      starter: e2-small
+      standard: e2-medium
+      performance: e2-standard-4
+    bootDiskGb: 10
+    # A daily dump is about this share of the data size, and one is kept for each day of retention.
+    dumpRatio: 0.3
+buckets:
+  service: Cloud Storage
+  classes:
+    standard: { label: Standard, storageClass: STANDARD, gbMonth: 0.025 }
+    infrequent: { label: Infrequent, storageClass: NEARLINE, gbMonth: 0.012 }
+    archive: { label: Archive, storageClass: ARCHIVE, gbMonth: 0.004 }

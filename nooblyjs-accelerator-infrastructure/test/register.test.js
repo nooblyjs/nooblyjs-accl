@@ -69,7 +69,15 @@ test('a role without the permission gets 403 and the refusal is audited; every w
 });
 
 test('an error inside an async route reaches the error handler, in the error shape, on Express 4 and 5', async () => {
-  const broken = (host) => ({ ...host, store: { ...host.store, readYaml: async () => { throw new Error('disk on fire'); } } });
+  // Only seed.yaml is broken, so the accelerator starts, and the seed route is what fails.
+  const broken = (host) => {
+    const readYaml = host.store.readYaml.bind(host.store);
+    host.store.readYaml = async (segments) => {
+      if (segments.join('/') === 'seed.yaml') throw new Error('disk on fire');
+      return readYaml(segments);
+    };
+    return host;
+  };
   const t = await startApp({ changeHost: broken });
   try {
     const res = await t.post(`${API}/seed`, { as: 'stevie', body: {} });
@@ -131,10 +139,10 @@ test('INFRA_PROVIDERS names the clouds this install may use, and an unknown one 
   }
 });
 
-test('the accelerator never initialises the serverManager, and uses the launcher\'s logging', async () => {
+test('the accelerator never initialises the serverManager, and uses the launcher\'s logging and queueing', async () => {
   const t = await startApp();
   try {
-    assert.deepEqual(t.serverManager.calls.map((c) => `${c.service}:${c.instanceName}`), ['logging:infrastructure']);
+    assert.deepEqual(t.serverManager.calls.map((c) => `${c.service}:${c.instanceName}`).sort(), ['logging:infrastructure', 'queueing:infrastructure']);
   } finally {
     await t.close();
   }

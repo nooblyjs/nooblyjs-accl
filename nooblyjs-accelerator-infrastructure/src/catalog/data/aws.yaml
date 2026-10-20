@@ -1,0 +1,70 @@
+# What Noobly Cloud offers on AWS, and what it costs (architecture.md §12). Prices are USD; `hourly` for machines and
+# database servers (730 hours a month), per GB-month for disks, storage and backups. `priceFactor` scales every price
+# in a region.
+cloud: aws
+label: Amazon Web Services
+short: AWS
+asOf: '2026-10-20'
+currency: USD
+source: >-
+  Illustrative prices that reproduce the design mockups. Not yet checked against the AWS price list; a refresh script
+  will regenerate them from the AWS Price List API (roadmap 7.5). Public IPv4 addresses are not priced.
+regions:
+  - id: af-south-1
+    label: Cape Town
+    zones: [af-south-1a, af-south-1b, af-south-1c]
+    priceFactor: 1
+  - id: eu-west-1
+    label: Ireland
+    zones: [eu-west-1a, eu-west-1b, eu-west-1c]
+    priceFactor: 0.85
+  - id: us-east-1
+    label: N. Virginia
+    zones: [us-east-1a, us-east-1b, us-east-1c, us-east-1d]
+    priceFactor: 0.8
+sizes:
+  small: t3.small
+  medium: t3.medium
+  large: t3.xlarge
+machineTypes:
+  t3.small: { vcpu: 2, memoryGb: 2, hourly: 0.026712 }
+  t3.medium: { vcpu: 2, memoryGb: 4, hourly: 0.053425 }
+  t3.large: { vcpu: 2, memoryGb: 8, hourly: 0.106849 }
+  t3.xlarge: { vcpu: 4, memoryGb: 16, hourly: 0.213699 }
+images:
+  - { id: ubuntu-2404-lts, label: Ubuntu 24.04 LTS, source: /aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id }
+  - { id: ubuntu-2204-lts, label: Ubuntu 22.04 LTS, source: /aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id }
+  - { id: debian-12, label: Debian 12, source: /aws/service/debian/release/12/latest/amd64 }
+  - { id: rocky-linux-9, label: Rocky Linux 9, source: rocky-linux-9-marketplace }
+disk:
+  ssdGbMonth: 0.08
+  minGb: 10
+databases:
+  mysql:
+    runsOn: RDS
+    versions:
+      - { id: '8.4', label: MySQL 8.4 LTS }
+      - { id: '8.0', label: MySQL 8.0 }
+    tiers:
+      starter: { class: db.t4g.small, vcpu: 1, memoryGb: 2, hourly: 0.035616 }
+      standard: { class: db.t4g.medium, vcpu: 2, memoryGb: 4, hourly: 0.071233 }
+      performance: { class: db.m6g.xlarge, vcpu: 4, memoryGb: 16, hourly: 0.260274 }
+    storageGbMonth: 0.15
+    backupGbMonth: 0.05
+    haFactor: 2
+  mongodb:
+    runsOn: a VM we launch and look after
+    versions:
+      - { id: '7.0', label: MongoDB 7.0 }
+    tiers:
+      starter: t3.small
+      standard: t3.medium
+      performance: t3.xlarge
+    bootDiskGb: 10
+    dumpRatio: 0.3
+buckets:
+  service: S3
+  classes:
+    standard: { label: Standard, storageClass: STANDARD, gbMonth: 0.028 }
+    infrequent: { label: Infrequent, storageClass: STANDARD_IA, gbMonth: 0.015 }
+    archive: { label: Archive, storageClass: GLACIER_IR, gbMonth: 0.005 }

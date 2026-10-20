@@ -43,7 +43,7 @@ Three rules hold everywhere:
 | Styling | The kit's `tokens.css` + `components.css`, plus `public/css/infrastructure.css` scoped to `[data-module="infrastructure"]` | The mockup palette *is* the kit's palette (§11.4). |
 | Records | `host.store` (nooblyjs-core `FsStore`: Markdown with YAML front matter, YAML, atomic writes, per-path locks) | Under `<dataDir>/infrastructure/`. |
 | Queue, logging, caching, scheduling | nooblyjs-core services via `serverManager`, instances named `infrastructure` | Never our own copies. |
-| Secrets | nooblyjs-core settings service, `encrypted` provider (AES-256-GCM) behind `src/services/secrets.js` | Swappable for GCP Secret Manager / AWS Secrets Manager (§10). |
+| Secrets | AES-256-GCM files under `<dataDir>/secrets/`, behind `src/services/secrets.js` | Swappable for GCP Secret Manager / AWS Secrets Manager (§10). Not the nooblyjs-core settings service: it mounts an HTTP API that reveals values. |
 | GCP | `@google-cloud/compute`, `@google-cloud/storage`, `@google-cloud/monitoring`, `googleapis` (Cloud SQL Admin) | Loaded lazily (`await import`) so mock-only installs and tests need none of them. |
 | AWS | AWS SDK v3: `client-ec2`, `client-rds`, `client-s3`, `s3-request-presigner`, `client-iam`, `client-cloudwatch`, `client-sts`, `client-ssm` | Same, lazily. |
 | Git | GitHub and GitLab REST APIs over `fetch`, authenticated with a personal access token | No SDK. |
@@ -190,7 +190,9 @@ record and whose body is free notes. Folders under `<dataDir>/infrastructure/`:
 | `buckets/<name>.md` | bucket | `spec` (account, region, class, access, versioning, keepVersionsDays, deleteAfterDays, lifecycle[], domain?), `ref`, `observed` (bytes, objects, measuredAt), `links` (`[{ app, mode, credentialRef }]`) |
 | `operations/<id>.md` | operation | §7 |
 | `ssh-keys.yaml` | — | people's public keys: `{ id, name, type, publicKey, fingerprint, addedBy, addedAt }` |
-| `activity/ledger.yaml` | — | append-only event lines (Recent activity, Activity page, month-to-date cost) |
+| `activity/ledger.yaml` | — | append-only worded events: `{ at, type, verb, tone, text, summary, actor, resource, account }` (Recent activity, the Activity page) |
+| `mock-cloud/<account>.yaml` | mock account | the mock cloud's resources and in-flight operations (§6.3) |
+| `secrets/<ref>.yaml` | secret | AES-256-GCM ciphertext bound to its ref (§10); `secrets/key-check.yaml` proves the key; `secrets/dev-key.txt` only in development |
 | `git-connections/<id>.md` | Git connection | `host` (github/gitlab), `user`, `tokenRef` (secret), `scopes`, `expiresAt`, `checkedAt`, `state` |
 | `config.yaml` | — | install id, defaults |
 
@@ -209,7 +211,7 @@ created **per account** with that account's credentials (from secrets) and cache
 ```js
 provider = {
   cloud: 'gcp' | 'aws' | 'mock',
-  account:   { verify(), regions(), zones(region), detectNetwork(region), ensureNetwork(region) },
+  account:   { verify(), regions(), zones(region), detectNetwork(region, { labels }), ensureNetwork(region, { labels }) },
   catalog:   { machineTypes(zone), images() },                     // live lists; prices come from src/catalog
   compute:   { create(spec), get(ref), list({ labels }), start(ref), stop(ref), restart(ref), remove(ref),
                reserveAddress(region), releaseAddress(ref), setFirewall(ref, rules), defaultAddress(ref),
@@ -223,9 +225,17 @@ provider = {
                get(ref, key) /* stream */, remove(ref, key), signedUrl(ref, key, seconds), stats(ref) },
   iam:       { grantBucket(bucketRef, mode) /* → credentials */, grantVm(vmRef, bucketRef, prefix, mode), revoke(grant) },
   metrics:   { vm(ref, window), database(ref, window) },
+  inventory({ labels }),                                            // { vms, databases, buckets, networks, addresses }
   waitFor(cloudOp, { signal, onProgress }),                         // polls the cloud's long-running operation
 }
 ```
+
+The contract grows with the roadmap: `src/providers/contract.js` lists what is required today (account, catalog,
+compute, inventory, waitFor), and databases, storage, iam and metrics join it in the phases that need them. The
+caller labels what it creates (`{ labels }`) and finds it again by those labels, which is what makes steps safe to
+run twice. A cloud's refusal is a `CloudError` (`invalid`, `permission`, `not_found`, `conflict`, `quota`,
+`unavailable`) whose message is in plain words and safe to show; anything else a provider throws is a fault, logged
+and not shown.
 
 Calls that start long cloud work return a **cloud operation handle** (`{ kind, id, zone? }`), which the operation
 engine stores in the operation record before waiting on it, so a restart resumes waiting instead of creating twice.
@@ -318,7 +328,7 @@ by `close()`):
 | MongoDB backup status | 15 min | Reads the last backup's result from each database VM; marks a missed or failed backup. |
 | Certificate check | 12 h | Reads expiry from Caddy on each VM; flags anything renewing within 7 days that hasn't renewed. |
 | Bucket stats | 60 min | Bytes and object counts (GCS: Monitoring `storage/total_bytes`; S3: CloudWatch `BucketSizeBytes`/`NumberOfObjects`), falls back to listing for small buckets. |
-| Cost snapshot | 60 min | Adds the hour's estimated cost per resource to the month's tally (§12). |
+| Cost snapshot | 60 min | Adds the hour's estimated cost per resource to the month's tally (§12). From roadmap phase 2, when VMs start and stop. |
 
 VM and database **metrics** are not polled in the background: the detail page asks, and the answer is cached for 60 s
 (nooblyjs-core caching, instance `infrastructure`).
@@ -409,9 +419,16 @@ MySQL, built from compute and the remote runner:
 
 ## 10. Secrets
 
-`src/services/secrets.js`: `put(kind, value) → ref`, `get(ref)`, `remove(ref)`, `reveal(ref, person, reason)`.
-Backed by the nooblyjs-core settings service with the `encrypted` provider (AES-256-GCM, key from `INFRA_SECRET_KEY`,
-else the host's `SETTINGS_SECRET`/`SESSION_SECRET`). Holds: cloud credentials, the control key, database admin and user
+`src/services/secrets.js`: `put(kind, value) → ref`, `get(ref)`, `remove(ref)`, `reveal(ref, person, reason)`,
+`scrub(text)`. Each secret is a file, `secrets/<ref>.yaml`, holding AES-256-GCM ciphertext with the ref as additional
+authenticated data (a ciphertext moved to another ref does not open). The key is derived (scrypt) from
+`INFRA_SECRET_KEY`, else the launcher's `SETTINGS_SECRET`/`SESSION_SECRET`; `secrets/key-check.yaml` makes a changed
+key fail at start rather than one secret at a time. In development with no key set, a random one is generated once
+into `secrets/dev-key.txt` (mode 0600) with a warning; in production `register()` refuses to start without one.
+
+Not the nooblyjs-core settings service, which the first draft named: creating it mounts
+`/services/settings/api/values?reveal=true` on the launcher's app, which would serve these values over HTTP, and its
+file lives outside this accelerator's folder. Holds: cloud credentials, the control key, database admin and user
 passwords (MySQL and MongoDB), bucket grant keys, Git personal access tokens, webhook secrets, uploaded TLS keys. Records hold only `…Ref`s.
 
 - The API never returns a secret, except `POST /databases/:name/reveal`, which needs `approve`, is people-only, and
@@ -519,9 +536,11 @@ not in v1.)
 - **Estimate** (`shared/estimate.js`): `estimate(spec, catalog) → { monthly, parts: [{ label, monthly }] }`, 730
   hours a month. A stopped VM costs its disk (and static IP). A MongoDB database costs its VM, its boot and data
   disks, and its share of the backups bucket (archive size × retention).
-- **Spend this month** (Overview): the hourly cost snapshot job (§8) sums each resource's rate for the state it was in
-  that hour; reset on the 1st. Labelled "Estimate". Real billed spend (GCP billing export, AWS Cost Explorer) is a
-  later phase (open decision O7).
+- **Spend this month** (Overview, `GET /cost`): an estimate for the whole month: each resource at its current rate,
+  from the 1st (or from when it was created, if later) to the end of the month. Labelled "Estimate · resets 1 Nov".
+  Until VMs can be started and stopped (roadmap phase 2) a resource's rate doesn't change within a month; then the
+  hourly cost snapshot job (§8) accrues each hour at the rate of the state it was in. Real billed spend (GCP billing
+  export, AWS Cost Explorer) is a later phase (open decision O7).
 
 ## 13. API
 
@@ -576,8 +595,8 @@ Deletes take `{ confirm: "<name>" }` in the body and refuse without it (the API,
 | `PORT` | 11008 | Standalone only. |
 | `DATA_DIR` | `./data` | Standalone only; records in `<DATA_DIR>/infrastructure`. |
 | `INFRA_PROVIDERS` | `mock` | Which adapters may be used: `mock`, `gcp`, `aws` (comma-separated). |
-| `INFRA_MOCK_STEP_MS` | 1200 | Mock provider pace. |
-| `INFRA_SECRET_KEY` | host's `SETTINGS_SECRET` | Key for secrets at rest. Required outside development. |
+| `INFRA_MOCK_STEP_MS` | 1200 | How long one unit of mock cloud work takes (a network: 2 units; a VM: 3). |
+| `INFRA_SECRET_KEY` | launcher's `SETTINGS_SECRET`, then `SESSION_SECRET` | Key for secrets at rest. Required in production; development makes one. |
 | `INFRA_PUBLIC_URL` | — | Where Git webhooks reach this server. Without it, auto-deploy is off. |
 | `INFRA_CONTROL_CIDR` | detected | The server's egress address(es) allowed to SSH to VMs. |
 | `ACME_EMAIL` | — | Let's Encrypt account email written into Caddy. |
@@ -608,6 +627,8 @@ Deletes take `{ confirm: "<name>" }` in the body and refuse without it (the API,
 - **D10 Databases are reached only from VMs in the same cloud account** (and, on AWS, region). No public database
   access, no cross-cloud networking.
 - **D11 Git access by personal access token** (GitHub, GitLab), stored as a secret, added by an Owner.
+- **D13 Secrets are this accelerator's own encrypted files** (§10), not the nooblyjs-core settings service (which
+  serves its values over HTTP); the interface is ready for a cloud secret manager.
 - **D12 The accelerator depends on the host contract, not on a launcher.** `../app.js` is the launcher; the NooblyJS AI
   host is an example of one.
 
@@ -616,7 +637,6 @@ Deletes take `{ confirm: "<name>" }` in the body and refuse without it (the API,
 | # | Question | Options | Recommendation | Blocks |
 | --- | --- | --- | --- | --- |
 | O4 | Control channel | SSH from the server (D5); agent on the VM polling over HTTPS | SSH for v1; revisit if inbound SSH from the server is unacceptable | — |
-| O6 | Secrets backend | nooblyjs-core encrypted settings; cloud secret managers | Encrypted settings now, interface ready for the others | — |
 | O7 | Real spend | GCP billing export to BigQuery + AWS Cost Explorer | Later; estimates in v1 | Phase 7 |
 | O8 | The launcher's entry-point convention across accelerators | `register(app, serverManager, { host, … })` (this one); `mount(app, eventEmitter, serviceRegistry, options)` (customers) | One convention, agreed with the `../app.js` owner; this accelerator keeps `register()` | Phase 0.6 |
 | O9 | Trusted HTTPS without the person's own domain | Let's Encrypt certificates for IP addresses (short-lived; check Caddy support); a wildcard-IP DNS service such as `sslip.io`; stay self-signed | Stay self-signed in v1; revisit IP certificates | Phase 7 |

@@ -1,6 +1,7 @@
 // Every screen URL in product.md §5, as a person would type or bookmark it, with the route and page it should land on.
+// `built`: the screen is built (not a "coming in roadmap phase N" placeholder).
 export const PAGES = [
-  { url: '/infrastructure', page: 'overview.js', title: 'Infrastructure' },
+  { url: '/infrastructure', page: 'overview.js', title: 'Infrastructure', built: true },
   { url: '/infrastructure/vms', page: 'vms.js', title: 'Virtual machines' },
   { url: '/infrastructure/vms/new', page: 'vm-launch.js', title: 'Launch a Linux VM' },
   { url: '/infrastructure/vms/web-01', page: 'vm.js', title: 'web-01', params: { name: 'web-01' } },
@@ -13,8 +14,8 @@ export const PAGES = [
   { url: '/infrastructure/buckets', page: 'buckets.js', title: 'Buckets' },
   { url: '/infrastructure/buckets/new', page: 'bucket-create.js', title: 'Create a bucket' },
   { url: '/infrastructure/buckets/stevie-media', page: 'buckets.js', title: 'stevie-media', params: { name: 'stevie-media' } },
-  { url: '/infrastructure/accounts', page: 'accounts.js', title: 'Cloud accounts' },
-  { url: '/infrastructure/activity', page: 'activity.js', title: 'Activity' },
+  { url: '/infrastructure/accounts', page: 'accounts.js', title: 'Cloud accounts', built: true },
+  { url: '/infrastructure/activity', page: 'activity.js', title: 'Activity', built: true },
 ];
 
 export const PAGE_URLS = PAGES.map((p) => p.url);

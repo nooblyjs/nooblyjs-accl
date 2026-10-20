@@ -50,8 +50,9 @@ export function caller(base) {
  * @param {object} [o.serverManager]
  * @param {boolean} [o.seed]   write the seed story first
  * @param {(dataDir: string) => Promise<void>} [o.before]   writes files before register() runs (restart tests)
+ * @param {number} [o.mockStepMs]   the mock cloud's pace (0: cloud work finishes at once)
  */
-export async function startApp({ mountPath = '/infrastructure', changeHost = (h) => h, serverManager = createTestServerManager(), seed = false, before } = {}) {
+export async function startApp({ mountPath = '/infrastructure', changeHost = (h) => h, serverManager = createTestServerManager(), seed = false, before, mockStepMs = 0 } = {}) {
   const rootDir = await tempDir();
   const dataDir = path.join(rootDir, mountPath.replace(/^\//, '') || 'root');
   await fs.mkdir(dataDir, { recursive: true });
@@ -62,7 +63,7 @@ export async function startApp({ mountPath = '/infrastructure', changeHost = (h)
   let hosted = null;
   let registerError = null;
   try {
-    hosted = await register(app, serverManager, { mountPath, dataDir, host: changeHost(stand.hostFor(dataDir)) });
+    hosted = await register(app, serverManager, { mountPath, dataDir, host: changeHost(stand.hostFor(dataDir)), mockStepMs, jobCheckMs: 0 });
   } catch (err) {
     registerError = err;
   }

@@ -9,6 +9,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createApi } from './src/routes/index.js';
+import { createRepos } from './src/repos/index.js';
+import { createCatalog } from './src/catalog/index.js';
+import { createProviders } from './src/providers/index.js';
+import { createConfig } from './src/services/config.js';
+import { createSecrets } from './src/services/secrets.js';
+import { createActivity } from './src/services/activity.js';
+import { createOperations } from './src/services/operations.js';
+import { createAccounts } from './src/services/accounts.js';
+import { createSync } from './src/services/sync.js';
+import { createJobs } from './src/services/jobs.js';
+import { createCost } from './src/services/cost.js';
 import { createSummary } from './src/services/summary.js';
 import { withWords } from './src/services/event-words.js';
 import { seed as seedStory } from './src/seed/index.js';
@@ -37,13 +48,24 @@ export function enabledProviders(value = process.env.INFRA_PROVIDERS) {
   return [...new Set(names)];
 }
 
+const envNumber = (name, fallback) => (process.env[name] === undefined || process.env[name] === '' ? fallback : Number(process.env[name]));
+
 /**
  * @param {import('express').Express} app   the launcher's app (Express 4 or 5)
  * @param {object} serverManager            nooblyjs-core ServiceRegistry, already initialised by the launcher
- * @param {{ mountPath?: string, dataDir: string, host: object }} options
+ * @param {object} options
+ * @param {string} [options.mountPath]
+ * @param {string} options.dataDir
+ * @param {object} options.host
+ * @param {number} [options.mockStepMs]   how long one unit of mock cloud work takes (INFRA_MOCK_STEP_MS; tests pass 0)
+ * @param {number} [options.jobCheckMs]   how often to check which jobs are due (INFRA_SYNC_CHECK_MS; 0: no timer)
  * @returns {Promise<object>} the HostedApp description
  */
-export async function register(app, serverManager, { mountPath = '/infrastructure', dataDir, host } = {}) {
+export async function register(app, serverManager, {
+  mountPath = '/infrastructure', dataDir, host,
+  mockStepMs = envNumber('INFRA_MOCK_STEP_MS', 1200),
+  jobCheckMs = envNumber('INFRA_SYNC_CHECK_MS', 60_000),
+} = {}) {
   // Check everything before mounting anything, so a failed start leaves nothing half-mounted (architecture.md §3.1).
   if (typeof app?.use !== 'function') throw new Error("nooblyjs-accelerator-infrastructure needs the launcher's Express app.");
   if (!serverManager?.initialized) throw new Error('nooblyjs-accelerator-infrastructure needs an initialised serverManager (the launcher initialises it).');
@@ -51,19 +73,54 @@ export async function register(app, serverManager, { mountPath = '/infrastructur
   if (!dataDir) throw new Error('nooblyjs-accelerator-infrastructure needs a dataDir.');
   const missing = NEEDS.filter((key) => !host?.[key]);
   if (missing.length) throw new Error(`nooblyjs-accelerator-infrastructure needs host.${missing.join(', host.')} from the launcher.`);
-  const providers = enabledProviders();
-  // Every event from here on carries `system: 'infrastructure'` and the sentence Activity shows (event-words.js).
-  host = { ...host, events: withWords(host.events) };
+  const enabled = enabledProviders();
 
-  // The launcher's logging provider, as an instance named after this accelerator (never one of our own).
+  // The launcher's logging and queueing providers, as instances named after this accelerator (never ones of our own).
   const log = serverManager.logger(serverManager.getDefaultProviderType('logging'), { instanceName: NAME });
+  const queue = serverManager.queue(serverManager.getDefaultProviderType('queueing'), { instanceName: NAME });
   // Business time comes from the launcher's clock, which a dev clock can move.
   const now = () => new Date(host.clock?.now?.() ?? Date.now()).getTime();
-  const seed = (options) => seedStory(host.store, { ...options, now });
-  const summary = createSummary({ host, mountPath });
+
+  const repos = createRepos(host.store, { log });
+  const config = createConfig({ store: host.store });
+  const secrets = await createSecrets({ store: host.store, log, audit: host.audit });
+  const catalog = await createCatalog();
+  const activity = createActivity({ repos, host, now });
+  // Every event from here on carries `system: 'infrastructure'` and its sentence, and is kept in the activity log.
+  host = { ...host, events: withWords(host.events, { record: activity.record, log }) };
+  const providers = createProviders({ enabled, store: host.store, secrets, catalog, mockStepMs, now });
+  const operations = createOperations({ repos, host, log, queue, providers, secrets, now, perAccount: envNumber('INFRA_OPS_PER_ACCOUNT', 4) });
+  const accounts = createAccounts({ repos, host, operations, providers, secrets, catalog, config, now, log });
+  const sync = createSync({ repos, operations, providers, config, host, log, now });
+  const cost = createCost({ repos, catalog, now });
+  const summary = createSummary({ repos, accounts, activity, cost });
+  const jobs = createJobs({
+    now,
+    log,
+    checkEveryMs: jobCheckMs,
+    jobs: [
+      { name: 'account-check', every: 15 * 60_000, run: () => accounts.checkAll() },
+      { name: 'inventory', every: () => sync.every(), run: () => sync.inventory() },
+    ],
+  });
+
+  /** Writes the seed story; mock accounts get mock credentials, and nothing read before the rewrite is kept. */
+  const seed = async (options) => {
+    const result = await seedStory(host.store, { ...options, now });
+    if (result.seeded) {
+      config.forget();
+      providers.reset();
+      await accounts.seedCredentials();
+      await operations.recover();
+    }
+    return result;
+  };
 
   const router = host.express.Router();
-  router.use('/api/v1', createApi({ host, log, seed, summary, about: { name: NAME, version: VERSION, mountPath, providers } }));
+  router.use('/api/v1', createApi({
+    host, log, seed, summary, accounts, operations, activity, catalog, cost,
+    about: { name: NAME, version: VERSION, mountPath, providers: enabled },
+  }));
   // The browser files (module, pages, CSS). redirect: false, or /infrastructure would 301 to /infrastructure/.
   router.use(host.express.static(PUBLIC_DIR, { index: false, redirect: false }));
   // Every other GET without a file extension is a page: the launcher's frame answers it, so deep links and refresh
@@ -71,6 +128,10 @@ export async function register(app, serverManager, { mountPath = '/infrastructur
   // Express 4 and 5 disagree on wildcard syntax (architecture.md §3.4).
   router.use((req, res, next) => (req.method === 'GET' && !path.extname(req.path) && !req.path.startsWith('/api/') ? host.frame(req, res, next) : next()));
   app.use(mountPath, router);
+
+  // Operations that were queued or under way when the server last stopped carry on; the jobs start ticking.
+  await operations.recover();
+  jobs.start();
 
   return {
     name: NAME,
@@ -88,9 +149,19 @@ export async function register(app, serverManager, { mountPath = '/infrastructur
     seed: async ({ reset = false, content = host.sampleData !== false } = {}) => {
       await seed({ reset, content });
     },
-    /** Stops background work (none yet: operations and jobs arrive in roadmap phase 1). */
-    close: async () => {},
+    /** Stops the jobs; running operations stop at their next safe point and carry on at the next start. */
+    close: async () => {
+      await jobs.close();
+      await operations.close();
+    },
     /** For the tests: resolves when no operation is queued or running. */
-    idle: async () => {},
+    idle: () => operations.idle(),
+    /** For the tests and a person in a hurry: run a job now ('account-check', 'inventory'). */
+    runJob: (name) => jobs.run(name),
+    /** For the tests and demos: the mock cloud of an account (failAt, outOfBand, resources). */
+    mockCloud: async (accountId) => {
+      const account = await repos.accounts.get(accountId);
+      return account ? providers.mockCloud(account) : null;
+    },
   };
 }
