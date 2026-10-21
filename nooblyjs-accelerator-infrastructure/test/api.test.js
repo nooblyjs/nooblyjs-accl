@@ -90,7 +90,7 @@ test('/operations lists by status and resource, checks its query, and 404s an un
     const active = (await t.get(`${API}/operations?status=active`, { as: 'naledi-k' })).json.operations;
     assert.equal(active.length, 3);
     const docs = (await t.get(`${API}/operations?resource=vm:docs-01`, { as: 'naledi-k' })).json.operations;
-    assert.deepEqual(docs.map((o) => [o.label, o.statusText]), [['Launch docs-01', 'Working · 1 of 3']]);
+    assert.deepEqual(docs.map((o) => [o.label, o.statusText]), [['Launch docs-01', 'Starting · 1 of 3']]);
     assert.equal((await t.get(`${API}/operations?status=nope`, { as: 'naledi-k' })).status, 400);
     assert.equal((await t.get(`${API}/operations?resource=../etc`, { as: 'naledi-k' })).status, 400);
     assert.equal((await t.get(`${API}/operations/op_nothere`, { as: 'naledi-k' })).status, 404);

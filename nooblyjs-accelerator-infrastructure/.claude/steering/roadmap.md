@@ -70,18 +70,18 @@ mid-operation and restarting resumes it with no duplicate mock resource.
 
 Goal: launch, see and run Linux VMs, first on mock, then on GCP, then on AWS.
 
-- [ ] 2.1 VM API (§13) with permissions (product.md §7) and confirm-to-delete.
-- [ ] 2.2 `vm.launch`, `vm.start`, `vm.stop`, `vm.restart`, `vm.delete` steps; static IP, firewall/security group, labels.
-- [ ] 2.3 Form components: `formSection`, `optionCards`, `switchRow`, `summary`; `forms.js`; shared `names.js`.
-- [ ] 2.4 **Virtual machines** page (`VirtualMachines.dc.html`): cloud chips, search (in the URL), table, statuses, actions menu, info band.
-- [ ] 2.5 **Launch a Linux VM** page (`LaunchVM.dc.html`): five sections, live summary and estimate, SSH keys (saved or pasted), "My IP only" (`GET /my-ip`, honours `trust proxy`), 422 field errors. The endpoint section is built but hidden behind a flag until phase 3 provides its API.
-- [ ] 2.6 **VM detail** page (`VMDetail.dc.html`): header and actions, Details card, launch progress while starting; Health tiles from mock metrics.
-- [ ] 2.7 cloud-init template (§9): `noobly` user, keys, Docker; ready marker; SSH runner (`ssh2`, pooled) with the fake-executor tests.
+- [x] 2.1 VM API (§13) with permissions (product.md §7) and confirm-to-delete.
+- [x] 2.2 `vm.launch`, `vm.start`, `vm.stop`, `vm.restart`, `vm.delete` steps; static IP, firewall/security group, labels.
+- [x] 2.3 Form components: `formSection`, `optionCards`, `switchRow`, `summary`; `forms.js`; shared `names.js`.
+- [x] 2.4 **Virtual machines** page (`VirtualMachines.dc.html`): cloud chips, search (in the URL), table, statuses, actions menu, info band.
+- [x] 2.5 **Launch a Linux VM** page (`LaunchVM.dc.html`): five sections, live summary and estimate, SSH keys (saved or pasted), "My IP only" (`GET /my-ip`, honours `trust proxy`), 422 field errors. Section 5 says public endpoints arrive in phase 3.
+- [x] 2.6 **VM detail** page (`VMDetail.dc.html`): header and actions, Details card, launch progress while starting; Health tiles from mock metrics.
+- [x] 2.7 cloud-init template (§9): `noobly` user, keys, Docker; ready marker; SSH runner (`ssh2`; scripts piped to `bash -s`, host key pinned on first use), tested against an in-process SSH server; a mock runner for mock VMs.
 - [ ] 2.8 **GCP compute adapter**: network `noobly-cloud`, instance, static address, firewall, images, machine types, extra data disks and disk resize, Cloud Monitoring CPU; contract suite passes against a sandbox project.
 - [ ] 2.9 **AWS compute adapter**: VPC, EC2, Elastic IP and the public DNS name, security group, AMIs via SSM, EBS data volumes and resize, CloudWatch CPU; contract suite passes against a sandbox account.
 - [ ] 2.10 Real account connection for GCP (service account JSON) and AWS (AssumeRole + ExternalId), with a documented least-privilege role for each.
-- [ ] 2.11 VM memory/disk health over SSH; 60 s cache.
-- [ ] 2.12 Cost snapshot job: accrue each hour at the rate of the state a resource was in (architecture §8, §12).
+- [x] 2.11 VM memory/disk health over SSH; 60 s cache.
+- [x] 2.12 Cost snapshot job: accrue each hour at the rate of the state a resource was in (architecture §8, §12).
 
 **Exit check:** on a real GCP project and a real AWS account, a Contributor launches an Ubuntu 24.04 VM with Docker
 from the form, sees it go Starting 1→2 of 3 → Running live, SSHes in with the shown command, stops and starts it

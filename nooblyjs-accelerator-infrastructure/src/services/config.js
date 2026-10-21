@@ -23,6 +23,12 @@ export function createConfig({ store }) {
     installId,
     /** The labels every resource this install creates carries, plus `extra` ({ 'noobly-name': 'web-01' }). */
     labels: async (extra = {}) => ({ 'managed-by': 'noobly-cloud', 'noobly-install': await installId(), ...extra }),
+    /** Merges `patch` into config.yaml. */
+    set: (patch) => store.withLock(FILE, async () => {
+      cached = { ...((await store.readYaml(FILE)) ?? {}), ...patch };
+      await store.writeYaml(FILE, cached);
+      return cached;
+    }),
     /** Forgets what was read (after the seed rewrote config.yaml). */
     forget() {
       cached = null;

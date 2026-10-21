@@ -4,7 +4,7 @@
 // marked `missing` (and said once), never deleted. A resource with an operation under way is left to its operation.
 
 /** A cloud status → the record's status, per kind. Anything else is kept as the cloud says it. */
-const STATUS = {
+export const STATUS = {
   vm: { provisioning: 'starting', running: 'running', stopping: 'stopping', stopped: 'stopped', terminated: 'stopped', deleting: 'deleting' },
   database: { creating: 'creating', available: 'available', 'backing-up': 'backing-up', stopped: 'stopped', deleting: 'deleting' },
   bucket: { ready: 'ready' },

@@ -32,11 +32,12 @@ machineTypes:
   e2-medium: { vcpu: 2, memoryGb: 4, hourly: 0.038356 }
   e2-standard-2: { vcpu: 2, memoryGb: 8, hourly: 0.076712 }
   e2-standard-4: { vcpu: 4, memoryGb: 16, hourly: 0.153425 }
+# Images: `user` is the image's default login (where the person's SSH key goes); `packages` its package manager.
 images:
-  - { id: ubuntu-2404-lts, label: Ubuntu 24.04 LTS, source: ubuntu-os-cloud/ubuntu-2404-lts-amd64 }
-  - { id: ubuntu-2204-lts, label: Ubuntu 22.04 LTS, source: ubuntu-os-cloud/ubuntu-2204-lts }
-  - { id: debian-12, label: Debian 12, source: debian-cloud/debian-12 }
-  - { id: rocky-linux-9, label: Rocky Linux 9, source: rocky-linux-cloud/rocky-linux-9 }
+  - { id: ubuntu-2404-lts, label: Ubuntu 24.04 LTS, user: ubuntu, packages: apt, source: ubuntu-os-cloud/ubuntu-2404-lts-amd64 }
+  - { id: ubuntu-2204-lts, label: Ubuntu 22.04 LTS, user: ubuntu, packages: apt, source: ubuntu-os-cloud/ubuntu-2204-lts }
+  - { id: debian-12, label: Debian 12, user: debian, packages: apt, source: debian-cloud/debian-12 }
+  - { id: rocky-linux-9, label: Rocky Linux 9, user: rocky, packages: dnf, source: rocky-linux-cloud/rocky-linux-9 }
 disk:
   ssdGbMonth: 0.068
   minGb: 10

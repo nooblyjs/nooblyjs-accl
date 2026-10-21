@@ -31,11 +31,12 @@ machineTypes:
   t3.medium: { vcpu: 2, memoryGb: 4, hourly: 0.053425 }
   t3.large: { vcpu: 2, memoryGb: 8, hourly: 0.106849 }
   t3.xlarge: { vcpu: 4, memoryGb: 16, hourly: 0.213699 }
+# Images: `user` is the image's default login (where the person's SSH key goes); `packages` its package manager.
 images:
-  - { id: ubuntu-2404-lts, label: Ubuntu 24.04 LTS, source: /aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id }
-  - { id: ubuntu-2204-lts, label: Ubuntu 22.04 LTS, source: /aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id }
-  - { id: debian-12, label: Debian 12, source: /aws/service/debian/release/12/latest/amd64 }
-  - { id: rocky-linux-9, label: Rocky Linux 9, source: rocky-linux-9-marketplace }
+  - { id: ubuntu-2404-lts, label: Ubuntu 24.04 LTS, user: ubuntu, packages: apt, source: /aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id }
+  - { id: ubuntu-2204-lts, label: Ubuntu 22.04 LTS, user: ubuntu, packages: apt, source: /aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id }
+  - { id: debian-12, label: Debian 12, user: debian, packages: apt, source: /aws/service/debian/release/12/latest/amd64 }
+  - { id: rocky-linux-9, label: Rocky Linux 9, user: rocky, packages: dnf, source: rocky-linux-9-marketplace }
 disk:
   ssdGbMonth: 0.08
   minGb: 10

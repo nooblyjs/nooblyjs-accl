@@ -148,3 +148,50 @@
 [data-module="infrastructure"] .inf-option:hover { border-color: var(--blue-600); }
 [data-module="infrastructure"] .inf-option:has(input:checked) { border-color: var(--blue-600); background: var(--blue-50); box-shadow: 0 0 0 1px var(--blue-600); }
 [data-module="infrastructure"] .inf-option input { accent-color: var(--blue-600); width: 18px; height: 18px; margin: 0; }
+
+/* ---- Phase 2: the VM screens ---- */
+/* The line under a title: status pill, cloud badge, facts */
+[data-module="infrastructure"] .inf-meta { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: -16px 0 0; font-size: var(--text-lead); color: var(--text-subtle); }
+[data-module="infrastructure"] .inf-strong-link { font-weight: 700; color: var(--text); }
+[data-module="infrastructure"] .inf-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+[data-module="infrastructure"] .inf-toolbar__search { flex: 0 1 380px; min-width: 240px; }
+[data-module="infrastructure"] .inf-band { padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius-panel); background: var(--surface-sidebar); font-size: var(--text-body); line-height: 1.55; color: var(--text-muted); }
+[data-module="infrastructure"] .inf-band strong { color: var(--text); }
+
+/* An operation's steps */
+[data-module="infrastructure"] .inf-steps { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; counter-reset: step; }
+[data-module="infrastructure"] .inf-steps__step { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: var(--radius-row); background: var(--surface-inset); counter-increment: step; }
+[data-module="infrastructure"] .inf-steps__label::before { content: counter(step) ". "; color: var(--text-subtle); }
+[data-module="infrastructure"] .inf-steps__step--running { background: var(--blue-50); box-shadow: inset 3px 0 0 var(--blue-600); }
+[data-module="infrastructure"] .inf-steps__step--done .inf-steps__label, [data-module="infrastructure"] .inf-steps__step--skipped .inf-steps__label { color: var(--text-subtle); }
+[data-module="infrastructure"] .inf-steps__step--failed { background: var(--danger-100); }
+
+/* Create forms: numbered sections, option cards, switches, the summary */
+[data-module="infrastructure"] .inf-sec { display: flex; flex-direction: column; gap: 20px; }
+[data-module="infrastructure"] .inf-sec__title { display: flex; align-items: center; margin: 0; font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+[data-module="infrastructure"] .inf-step { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; margin-right: 12px; border-radius: var(--radius-full); background: var(--navy-900); color: var(--text-on-navy); font-family: var(--font-ui); font-size: 13px; font-weight: 700; flex: none; }
+[data-module="infrastructure"] .inf-field--narrow { max-width: 420px; }
+[data-module="infrastructure"] .inf-choice--wide { grid-template-columns: 1fr; }
+[data-module="infrastructure"] .inf-option--card { align-items: flex-start; }
+[data-module="infrastructure"] .inf-option--card input { margin-top: 2px; }
+[data-module="infrastructure"] .inf-option__body { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-weight: 400; }
+[data-module="infrastructure"] .inf-option__head { display: flex; align-items: center; gap: 8px; }
+[data-module="infrastructure"] .inf-option__title { display: block; font-weight: 700; font-size: 15.5px; }
+[data-module="infrastructure"] .inf-option__text { display: block; font-size: var(--text-caption); line-height: 1.4; color: var(--text-subtle); }
+[data-module="infrastructure"] .inf-option__price { display: block; margin-top: 5px; font-size: var(--text-small); font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+[data-module="infrastructure"] .inf-switch { display: flex; align-items: flex-start; gap: 14px; cursor: pointer; }
+[data-module="infrastructure"] .inf-switch__input { appearance: none; -webkit-appearance: none; position: relative; flex: none; width: 44px; height: 26px; margin: 0; border-radius: var(--radius-full); background: var(--border-strong); cursor: pointer; }
+[data-module="infrastructure"] .inf-switch__input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: var(--radius-full); background: var(--surface-card); transition: left 0.15s; }
+[data-module="infrastructure"] .inf-switch__input:checked { background: var(--success-700); }
+[data-module="infrastructure"] .inf-switch__input:checked::after { left: 21px; }
+[data-module="infrastructure"] .inf-switch__input:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+[data-module="infrastructure"] .inf-summary { position: sticky; top: 24px; display: flex; flex-direction: column; gap: 4px; }
+[data-module="infrastructure"] .inf-sumrows { margin: 8px 0 0; }
+[data-module="infrastructure"] .inf-sumrows__row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--divider); font-size: var(--text-small); }
+[data-module="infrastructure"] .inf-sumrows__row dt { color: var(--text-subtle); }
+[data-module="infrastructure"] .inf-sumrows__row dd { margin: 0; font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+[data-module="infrastructure"] .inf-summary__total { display: flex; justify-content: space-between; align-items: baseline; padding: 18px 0 8px; }
+[data-module="infrastructure"] .inf-summary__label { font-size: var(--text-small); font-weight: 600; color: var(--text-subtle); }
+[data-module="infrastructure"] .inf-summary__usd { font-family: var(--font-display); font-size: 32px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+[data-module="infrastructure"] .inf-summary__action { width: 100%; margin-top: 12px; }
+[data-module="infrastructure"] .inf-summary__foot { margin: 10px 0 0; text-align: center; font-size: var(--text-caption); color: var(--text-subtle); }

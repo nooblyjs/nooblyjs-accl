@@ -20,6 +20,9 @@ import { createAccounts } from './src/services/accounts.js';
 import { createSync } from './src/services/sync.js';
 import { createJobs } from './src/services/jobs.js';
 import { createCost } from './src/services/cost.js';
+import { createSshKeys } from './src/services/ssh-keys.js';
+import { createVms } from './src/services/vms.js';
+import { createRemote } from './src/remote/index.js';
 import { createSummary } from './src/services/summary.js';
 import { withWords } from './src/services/event-words.js';
 import { seed as seedStory } from './src/seed/index.js';
@@ -92,7 +95,10 @@ export async function register(app, serverManager, {
   const operations = createOperations({ repos, host, log, queue, providers, secrets, now, perAccount: envNumber('INFRA_OPS_PER_ACCOUNT', 4) });
   const accounts = createAccounts({ repos, host, operations, providers, secrets, catalog, config, now, log });
   const sync = createSync({ repos, operations, providers, config, host, log, now });
-  const cost = createCost({ repos, catalog, now });
+  const cost = createCost({ repos, catalog, store: host.store, now });
+  const remote = createRemote({ providers, secrets, config, catalog, repos });
+  const sshKeys = createSshKeys({ repos, host, now });
+  const vms = createVms({ repos, host, operations, providers, remote, sshKeys, catalog, config, cost, now, log });
   const summary = createSummary({ repos, accounts, activity, cost });
   const jobs = createJobs({
     now,
@@ -101,24 +107,28 @@ export async function register(app, serverManager, {
     jobs: [
       { name: 'account-check', every: 15 * 60_000, run: () => accounts.checkAll() },
       { name: 'inventory', every: () => sync.every(), run: () => sync.inventory() },
+      { name: 'cost-snapshot', every: 60 * 60_000, run: () => cost.accrue() },
     ],
   });
 
-  /** Writes the seed story; mock accounts get mock credentials, and nothing read before the rewrite is kept. */
+  /**
+   * Writes the seed story; mock accounts get mock credentials, and nothing read before the rewrite is kept. The
+   * story's operations under way wait for resume() (or the next start), so a test sees the story as written.
+   */
   const seed = async (options) => {
     const result = await seedStory(host.store, { ...options, now });
     if (result.seeded) {
       config.forget();
       providers.reset();
+      remote.forget();
       await accounts.seedCredentials();
-      await operations.recover();
     }
     return result;
   };
 
   const router = host.express.Router();
   router.use('/api/v1', createApi({
-    host, log, seed, summary, accounts, operations, activity, catalog, cost,
+    host, log, seed, summary, accounts, operations, activity, catalog, cost, vms, sshKeys,
     about: { name: NAME, version: VERSION, mountPath, providers: enabled },
   }));
   // The browser files (module, pages, CSS). redirect: false, or /infrastructure would 301 to /infrastructure/.
@@ -154,6 +164,8 @@ export async function register(app, serverManager, {
       await jobs.close();
       await operations.close();
     },
+    /** Carries on with the operations under way on disk (after seeding, as at a start). */
+    resume: () => operations.recover(),
     /** For the tests: resolves when no operation is queued or running. */
     idle: () => operations.idle(),
     /** For the tests and a person in a hurry: run a job now ('account-check', 'inventory'). */

@@ -275,7 +275,10 @@ export function createOperations({ repos, host, log, queue, providers, secrets, 
     await emit('infrastructure.operation.failed', { ...facts(failed), stepLabel: step?.label ?? null, reason: message }, failed.requestedBy?.id);
   }
 
-  /** Undoes the finished steps that know how (newest first), then marks the operation cancelled. */
+  /**
+   * Undoes the steps that know how (newest first) — the finished ones, and the one that was running when the cancel
+   * came, which may be half done (an undo must cope with that) — then marks the operation cancelled.
+   */
   async function finishCancelled(id, entry = null) {
     const op = await repos.operations.get(id);
     const def = types.get(op.type);
@@ -287,7 +290,7 @@ export function createOperations({ repos, host, log, queue, providers, secrets, 
         log.warn(`operation ${id}: could not undo: ${err.message}`);
       }
       for (let i = op.steps.length - 1; ctx && i >= 0; i--) {
-        if (op.steps[i].status !== 'done' || !def.steps[i].undo) continue;
+        if (!['done', 'running'].includes(op.steps[i].status) || !def.steps[i].undo) continue;
         try {
           await def.steps[i].undo({ ...ctx, signal: new AbortController().signal });
           await update(id, (r) => r, `Undone: ${def.steps[i].label}`);
@@ -357,7 +360,10 @@ export function createOperations({ repos, host, log, queue, providers, secrets, 
     const index = op.steps?.findIndex((s) => s.status === 'running' || s.status === 'pending') ?? -1;
     switch (op.status) {
       case 'queued': return 'Queued';
-      case 'running': return `${types.get(op.type)?.verb ?? 'Working'} · ${index < 0 ? total : index + 1} of ${total}`;
+      case 'running': {
+        const verb = types.get(op.type)?.verb ?? 'Working';
+        return total > 1 ? `${verb} · ${index < 0 ? total : index + 1} of ${total}` : verb;
+      }
       case 'succeeded': return 'Finished';
       case 'failed': return 'Failed';
       case 'cancelled': return 'Cancelled';

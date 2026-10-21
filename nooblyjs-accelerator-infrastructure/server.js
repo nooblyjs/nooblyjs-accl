@@ -62,7 +62,11 @@ if (args.has('--seed')) {
   await serverManager.shutdown?.();
   process.exit(0);
 }
-if (firstStart) await hosted.seed({ reset: false });
+if (firstStart) {
+  await hosted.seed({ reset: false });
+  // The story has a VM launch under way: carry on with it, as a start would.
+  await hosted.resume();
+}
 
 // The home page is Noobly Cloud; its pages are this accelerator's module in the frame.
 app.get('/', (req, res) => res.redirect(302, MOUNT_PATH));

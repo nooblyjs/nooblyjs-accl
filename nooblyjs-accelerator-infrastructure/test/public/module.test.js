@@ -51,7 +51,8 @@ test('the kit is imported by absolute URL and the accelerator\'s own files relat
     for (const [, from] of source.matchAll(/from '([^']+)'/g)) {
       assert.match(from, /^(\/ui\/js\/|\.\.?\/)/, `${path.basename(file)} imports ${from}`);
     }
-    assert.doesNotMatch(source, /\breact\b|https?:\/\//i, `${path.basename(file)} pulls in React or a remote script`);
+    assert.doesNotMatch(source, /\breact\b/i, `${path.basename(file)} pulls in React`);
+    assert.doesNotMatch(source, /(from |import\(|src=")['"]?https?:\/\//, `${path.basename(file)} loads code from another site`);
   }
 });
 

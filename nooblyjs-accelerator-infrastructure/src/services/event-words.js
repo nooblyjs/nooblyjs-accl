@@ -43,8 +43,16 @@ const WORDS = {
   },
 
   // The resources' own events. Their operations arrive in roadmap phases 2–6; the seed story already uses them.
+  // Created when the launch is asked for (the Overview shows "Created" while the VM is still starting); Ready when it
+  // is up and its first boot has finished.
   'infrastructure.vm.created': { verb: 'Created', tone: 'info', text: (p) => `VM ${p.name} · ${cloudOf(p)} ${p.region}` },
+  'infrastructure.vm.ready': {
+    verb: 'Ready', tone: 'success',
+    text: (p) => `VM ${p.name}${p.ip ? ` at ${p.ip}` : ''}`,
+    summary: (p) => `launched VM ${p.name}${p.ip ? `, up at ${p.ip}` : ''}`,
+  },
   'infrastructure.vm.started': { verb: 'Started', tone: 'success', text: (p) => `VM ${p.name}` },
+  'infrastructure.vm.restarted': { verb: 'Restarted', tone: 'success', text: (p) => `VM ${p.name}` },
   'infrastructure.vm.stopped': { verb: 'Stopped', tone: 'neutral', text: (p) => `VM ${p.name}` },
   'infrastructure.vm.deleted': { verb: 'Deleted', tone: 'neutral', text: (p) => `VM ${p.name}` },
   'infrastructure.app.building': {

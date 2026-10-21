@@ -14,7 +14,8 @@ spec:
   sshFrom: my-ip
 ref:
   instance: vm-seeddoc01
-  address: null
+  address: ip-seeddoc01
+  network: net-seedgcp1
 createdAt: '{{ago:4m}}'
 createdBy: { id: stevie, name: Stevie }
 ---

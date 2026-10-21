@@ -4,10 +4,10 @@ A NooblyJS accelerator to run your own infrastructure on **Google Cloud** and **
 Linux VMs, deploy apps from Git onto them, create databases (managed MySQL, or MongoDB on a VM) and storage buckets,
 put them on public addresses, and see what everything costs.
 
-Status: **roadmap phase 1** — everything runs on a **mock cloud** (nothing is created in GCP or AWS yet). Built: the
-Overview, cloud accounts (connect, check, remove), the activity log, the operations engine that runs long work and
-picks it up again after a restart, encrypted secrets, and the price catalogue. The VM, app, database and bucket screens
-are routed placeholders until their phases. See `.claude/steering/roadmap.md` for what comes next.
+Status: **roadmap phase 2 on the mock cloud** — nothing is created in GCP or AWS yet. Built: the Overview, cloud
+accounts, the activity log, and virtual machines (launch, stop, start, restart, delete, health, SSH keys), run as
+operations that pick up again after a restart. The GCP and AWS adapters need sandbox accounts to finish. App, database
+and bucket screens are routed placeholders until their phases. See `.claude/steering/roadmap.md` for what comes next.
 
 ## Run it on its own
 

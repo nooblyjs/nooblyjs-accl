@@ -2,9 +2,9 @@
 // `built`: the screen is built (not a "coming in roadmap phase N" placeholder).
 export const PAGES = [
   { url: '/infrastructure', page: 'overview.js', title: 'Infrastructure', built: true },
-  { url: '/infrastructure/vms', page: 'vms.js', title: 'Virtual machines' },
-  { url: '/infrastructure/vms/new', page: 'vm-launch.js', title: 'Launch a Linux VM' },
-  { url: '/infrastructure/vms/web-01', page: 'vm.js', title: 'web-01', params: { name: 'web-01' } },
+  { url: '/infrastructure/vms', page: 'vms.js', title: 'Virtual machines', built: true },
+  { url: '/infrastructure/vms/new', page: 'vm-launch.js', title: 'Launch a Linux VM', built: true },
+  { url: '/infrastructure/vms/web-01', page: 'vm.js', title: 'web-01', params: { name: 'web-01' }, built: true },
   { url: '/infrastructure/apps', page: 'apps.js', title: 'Apps' },
   { url: '/infrastructure/apps/new', page: 'app-deploy.js', title: 'Deploy an app from Git' },
   { url: '/infrastructure/apps/storefront', page: 'app.js', title: 'storefront', params: { name: 'storefront' } },

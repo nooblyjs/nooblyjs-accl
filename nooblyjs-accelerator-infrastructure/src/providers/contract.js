@@ -3,11 +3,13 @@
 // handle the operations engine stores before waiting on it with waitFor(), so a restart waits again instead of
 // starting the work twice. Every resource is created with the caller's labels, and list calls filter by them.
 //
-// The contract grows with the roadmap: databases, storage and iam join when their phases need them.
+// The contract grows with the roadmap: metrics.vm joined in phase 2; databases, storage and iam join when their phases
+// need them.
 export const CONTRACT = {
   account: ['verify', 'regions', 'zones', 'detectNetwork', 'ensureNetwork'],
   catalog: ['machineTypes', 'images'],
   compute: ['create', 'get', 'list', 'start', 'stop', 'restart', 'remove', 'reserveAddress', 'releaseAddress', 'setFirewall', 'defaultAddress'],
+  metrics: ['vm'],
   '': ['inventory', 'waitFor'],
 };
 

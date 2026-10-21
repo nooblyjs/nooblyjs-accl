@@ -115,25 +115,38 @@ test('one operation at a time per resource; different resources run side by side
 test('at most perAccount operations at a time in one cloud account', async () => {
   const e = await engine({ perAccount: 1 });
   try {
+    // Every step holds until the test lets go, so how many run at once doesn't depend on timing.
     const running = new Set();
     let most = 0;
+    let hold = gate();
     e.ops.define('test.count', {
       label: () => 'Count',
       steps: [{ key: 'count', label: 'Count', run: async (ctx) => {
         running.add(ctx.op.id);
         most = Math.max(most, running.size);
-        await new Promise((r) => setTimeout(r, 15));
+        await waitFor(hold, ctx);
         running.delete(ctx.op.id);
       } }],
     });
+    const until = async (check) => {
+      for (let i = 0; i < 200 && !check(); i++) await new Promise((r) => setTimeout(r, 5));
+    };
     for (const name of ['a', 'b', 'c']) await e.ops.start('test.count', { resource: { type: 'vm', name }, account: null });
-    await e.ops.idle();
+    await until(() => running.size === 3);
     assert.equal(most, 3, 'no account: no limit');
+    hold.open();
+    await e.ops.idle();
+
     // The account limit, without an account record: the provider is only looked up when the record exists.
     most = 0;
+    hold = gate();
     for (const name of ['d', 'e', 'f']) await e.ops.start('test.count', { resource: { type: 'vm', name }, account: 'stevie-prod' });
+    await until(() => running.size >= 1);
+    await new Promise((r) => setTimeout(r, 30));
+    assert.equal(running.size, 1, 'one at a time in stevie-prod');
+    hold.open();
     await e.ops.idle();
-    assert.equal(most, 1, 'one at a time in stevie-prod');
+    assert.equal(most, 1);
   } finally {
     await close(e);
   }

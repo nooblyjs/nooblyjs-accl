@@ -6,10 +6,11 @@ import { handler } from '../util/http.js';
 import { ACTIVITY_KINDS } from '../services/activity.js';
 import { accountRoutes } from './accounts.js';
 import { operationRoutes } from './operations.js';
+import { vmRoutes, sshKeyRoutes, myIp } from './vms.js';
 
 const READS = new Set(['GET', 'HEAD', 'OPTIONS']);
 
-export function createApi({ host, log, about, seed, summary, accounts, operations, activity, catalog, cost }) {
+export function createApi({ host, log, about, seed, summary, accounts, operations, activity, catalog, cost, vms, sshKeys }) {
   const api = host.express.Router();
   api.use(host.express.json({ limit: '1mb' }));
   api.use(host.auth);
@@ -44,6 +45,9 @@ export function createApi({ host, log, about, seed, summary, accounts, operation
   // ---------- resources ----------
   api.use('/accounts', accountRoutes({ host, accounts }));
   api.use('/operations', operationRoutes({ host, operations }));
+  api.use('/vms', vmRoutes({ host, vms }));
+  api.use('/ssh-keys', sshKeyRoutes({ host, sshKeys }));
+  api.get('/my-ip', myIp);
 
   api.use(apiNotFound);
   api.use(apiErrors({ log }));

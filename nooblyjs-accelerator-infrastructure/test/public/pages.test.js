@@ -107,6 +107,42 @@ test('the Activity page lists what happened, newest first, and filters by kind',
   assert.match(vms, /data-kind="vm" aria-pressed="true"/);
 });
 
+test('Virtual machines lists the seed\'s five VMs as the mockup does, with a menu per row', async () => {
+  const { out } = await draw('/infrastructure/vms');
+  for (const text of [
+    '5 Linux VMs across GCP and AWS · 3 running', 'web-01', 'Ubuntu 24.04 LTS', 'africa-south1-a', 'e2-medium', '2 vCPU · 4 GB',
+    'Running', 'Stopped', 'Starting · 1 of 3', '203.0.113.24', 'Assigning…', 'Paused while stopped', 'Certificate pending',
+    'Private only', 'disk only', 'Actions for web-01', 'Copy SSH command', 'Launch VM', 'Database VMs',
+  ]) assert.ok(out.includes(escapeHtml(text)), `the list says "${text}"`);
+  assert.match(out, /data-cloud="gcp"[^>]*>GCP <span class="chip__count">3</);
+  const viewer = (await draw('/infrastructure/vms', { id: 'naledi-k', name: 'Naledi K.', accessRole: 'Viewer' })).out;
+  assert.ok(!viewer.includes('Launch VM') && !viewer.includes('data-action="stop"') && !viewer.includes('data-action="delete"'), 'a Viewer only looks');
+});
+
+test('Launch a Linux VM offers the connected accounts, sizes with prices, and a summary at $30 for the defaults', async () => {
+  const { out } = await draw('/infrastructure/vms/new');
+  for (const text of [
+    'Cloud and region', 'Google Cloud', 'Project stevie-prod', 'Account stevie-aws · 0932', 'africa-south1 · Johannesburg',
+    '~$14 / mo', '~$28 / mo', '~$112 / mo', 'Choose any machine type', 'Install Docker on first boot', 'stevie-macbook · ed25519',
+    'My IP only · 127.0.0.1', 'Public endpoints arrive in roadmap phase 3', 'Ready in about 2 minutes',
+  ]) assert.ok(out.includes(escapeHtml(text)), `the form says "${text}"`);
+  assert.match(out, /data-summary="total">\$30</, 'the summary prices e2-medium with 30 GB');
+  assert.match(out, /VM \$28 · disk \$2\.04 · billed by GCP to stevie-prod/);
+  assert.match(out, /<label class="inf-field__label" for="inf-f-name">Name<\/label>/, 'every control is labelled');
+  const viewer = (await draw('/infrastructure/vms/new', { id: 'naledi-k', name: 'Naledi K.', accessRole: 'Viewer' })).out;
+  assert.ok(viewer.includes('needs the draft permission') && !viewer.includes('<form'));
+});
+
+test('VM detail shows web-01 as the mockup does', async () => {
+  const { out } = await draw('/infrastructure/vms/web-01');
+  for (const text of [
+    'Running', 'africa-south1-a · e2-medium · Ubuntu 24.04 LTS · up 18 days', 'Open SSH', 'Deploy an app',
+    'https://shop.example.com', 'container port 3000', 'Valid', 'Verified', 'storefront', 'github.com/stevie/storefront',
+    'main · ./Dockerfile', 'a1f3c9e', 'On push to main', '203.0.113.24 · static', '10.10.0.12', 'ssh ubuntu@203.0.113.24',
+    'stevie-macbook · ed25519', '22 (my IP only) · 80 · 443', 'Docker 27 · HTTPS proxy', '$30 / month', 'Danger zone',
+  ]) assert.ok(out.includes(escapeHtml(text)), `the page says "${text}"`);
+});
+
 test('a name in the URL is escaped, never markup', async () => {
   const { out } = await draw('/infrastructure/vms/%3Cimg%20src%3Dx%3E');
   assert.doesNotMatch(out, /<img/);

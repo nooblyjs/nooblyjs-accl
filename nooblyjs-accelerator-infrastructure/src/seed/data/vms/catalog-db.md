@@ -13,6 +13,7 @@ spec:
   dataDiskGb: 20
   docker: false
 ref:
+  network: net-seedgcp1
   instance: vm-seedcat01
 observed:
   status: running
@@ -20,6 +21,7 @@ observed:
   privateIp: 10.10.0.30
   machineType: e2-medium
   seenAt: '{{ago:3m}}'
+startedAt: '{{ago:15d}}'
 createdAt: '{{ago:15d}}'
 createdBy: { id: stevie, name: Stevie }
 ---

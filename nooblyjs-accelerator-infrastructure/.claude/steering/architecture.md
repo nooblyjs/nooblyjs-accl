@@ -294,7 +294,7 @@ step after a crash never creates twice. Examples, matching the mockups' progress
 
 | Type | Steps |
 | --- | --- |
-| `vm.launch` ("Starting · 1 of 3") | 1 Create the machine (network, static IP, firewall, instance; wait for RUNNING) · 2 Prepare it (wait for cloud-init: Docker, Caddy, control key) · 3 Endpoint (Caddy site; for the cloud's address a self-signed certificate at once, for a domain wait for its DNS record, then the Let's Encrypt certificate) — skipped without an endpoint |
+| `vm.launch` ("Starting · 1 of 3") | 1 Create the machine (network, static IP, firewall, instance; wait for RUNNING) · 2 Prepare it (wait for cloud-init: Docker, Caddy, control key) · 3 Public endpoint (Caddy site; for the cloud's address a self-signed certificate at once, for a domain wait for its DNS record, then the Let's Encrypt certificate) — skipped without an endpoint |
 | `app.deploy` ("Building · step 4 of 9") | 1 Connect · 2 Clone · 3 Read Dockerfile · 4 Build image · 5 Start new container · 6 Health check · 7 Switch traffic · 8 Stop previous container · 9 Clean up old images |
 | `db.create` (MySQL) | 1 Network access · 2 Create the server · 3 Admin user and password · 4 Backups · 5 Allow VMs |
 | `db.create` (MongoDB) | 1 Launch the database VM (the `vm.launch` steps 1–2, no Docker, no endpoint, data disk) · 2 Install MongoDB · 3 Admin user and password · 4 Backups (bucket, VM identity, timer) · 5 Allow VMs (firewall on 27017) |
@@ -306,6 +306,10 @@ concurrency limit per account (`INFRA_OPS_PER_ACCOUNT`, default 4) and **one ope
 stop waits for the launch to finish). Each step transition writes the record under its lock, appends to the log, and
 emits `infrastructure.operation.progress`; completion emits the domain event (`vm.launched`, `app.deployed`,
 `database.backed_up`, …) that Activity and the pages listen to.
+
+**Undo.** Cancel undoes the finished steps that define `undo`, and the step that was running when the cancel came
+(which may be half done, so an undo must cope with that), newest first. A cancelled launch deletes what it made and
+the VM's record.
 
 **Recovery.** `register()` calls `operations.recover()`: every `running` operation is re-queued at its current step
 (idempotency makes that safe); a `queued` one is re-queued. **Cancel** sets an `AbortSignal`; the current step stops
@@ -346,8 +350,9 @@ address (`INFRA_CONTROL_CIDR`, detected if unset) in addition to the person's ch
 closed when idle. *Alternative (open decision O4): a small agent on the VM that polls the server over HTTPS, so no
 inbound SSH is needed.*
 
-**No shell interpolation of user input.** Remote work runs fixed scripts from `src/remote/scripts/` uploaded over
-SFTP. Arguments are validated (repo URL `https://` or `git@host:path`, never starting with `-`; branch passes
+**No shell interpolation of user input.** Remote work runs fixed scripts from `src/remote/scripts/`, piped over
+stdin to `bash -s` (nothing is left on the VM and no SFTP is needed); the VM's host key is pinned the first time and
+checked every time after. Arguments are validated (repo URL `https://` or `git@host:path`, never starting with `-`; branch passes
 `git check-ref-format`; names match §5; env keys `^[A-Z_][A-Z0-9_]*$`) and passed as positional arguments with
 `shell-quote`-style escaping; environment values are written to `/srv/apps/<app>/.env` (mode 0600) over SFTP and given
 to Docker with `--env-file`, never placed on a command line.

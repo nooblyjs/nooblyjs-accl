@@ -52,8 +52,13 @@ export class MockCloud {
       if (op.applied || new Date(op.doneAt).getTime() > at) continue;
       const i = this.state.resources.findIndex((r) => r.id === op.resource);
       if (i >= 0) {
+        const resource = this.state.resources[i];
         if (op.after === null) this.state.resources.splice(i, 1);
-        else Object.assign(this.state.resources[i], op.after);
+        else {
+          // A VM that comes up again has been up since this moment.
+          if (op.after.status === 'running' && resource.status !== 'running') resource.startedAt = op.doneAt;
+          Object.assign(resource, op.after);
+        }
       }
       op.applied = true;
       changed = true;

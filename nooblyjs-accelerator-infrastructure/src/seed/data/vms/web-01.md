@@ -13,6 +13,7 @@ spec:
   sshKeyId: key_seedmacbook
   sshFrom: my-ip
 ref:
+  network: net-seedgcp1
   instance: vm-seedweb01
   address: ip-seedweb01
 observed:
@@ -21,6 +22,9 @@ observed:
   privateIp: 10.10.0.12
   machineType: e2-medium
   seenAt: '{{ago:3m}}'
+startedAt: '{{ago:18d}}'
+runtime:
+  docker: 27.3.1
 createdAt: '{{ago:18d}}'
 createdBy: { id: stevie, name: Stevie }
 ---

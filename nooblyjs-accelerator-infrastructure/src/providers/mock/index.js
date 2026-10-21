@@ -87,7 +87,7 @@ export function createMockProvider({ account, credentials, cloud, catalog }) {
   };
 
   const compute = {
-    /** spec: { name, zone, machineType, image, diskGb, labels, address?, network? } */
+    /** spec: { name, zone, machineType, image, diskGb, labels, userData, address?, network? } */
     create: guard('compute.create', async (spec) => {
       if (!catalog.machineTypes[spec.machineType]) throw new CloudError('invalid', `${catalog.short} has no machine type ${spec.machineType}.`);
       const where = regionOfZone(spec.zone);
@@ -99,7 +99,7 @@ export function createMockProvider({ account, credentials, cloud, catalog }) {
         state.resources.push({
           id: ref, kind: 'vm', name: spec.name, zone: spec.zone, region: where.id, machineType: spec.machineType, image: spec.image,
           diskGb: spec.diskGb, status: 'provisioning', publicIp: address, privateIp: `10.10.0.${10 + state.resources.length}`,
-          firewall: [], labels: spec.labels ?? {}, createdAt: new Date(cloud.now()).toISOString(),
+          firewall: [], userData: spec.userData ?? '', labels: spec.labels ?? {}, createdAt: new Date(cloud.now()).toISOString(),
         });
         return { ref, operation: cloud.begin(state, ref, 'compute.create', { status: 'running' }, 3) };
       });
@@ -153,6 +153,15 @@ export function createMockProvider({ account, credentials, cloud, catalog }) {
       images: guard('catalog.images', async () => catalog.images.map((i) => ({ id: i.id, label: i.label }))),
     },
     compute,
+    metrics: {
+      /** CPU over the window (the cloud's monitoring); the seed story sets `sim` from the mockups. */
+      vm: guard('metrics.vm', async (ref, window = '1h') => {
+        const vm = (await cloud.resources((r) => r.id === ref && r.kind === 'vm'))[0];
+        if (!vm) throw new CloudError('not_found', `The mock cloud has no VM ${ref}.`);
+        if (vm.status !== 'running') return { window, cpuPercent: null };
+        return { window, cpuPercent: vm.sim?.cpuPercent ?? 12 };
+      }),
+    },
     /** Everything carrying `labels`, by kind: what the inventory sync compares with the records. */
     inventory: guard('inventory', async ({ labels = {} } = {}) => {
       const all = await cloud.resources((r) => hasLabels(r, labels));
